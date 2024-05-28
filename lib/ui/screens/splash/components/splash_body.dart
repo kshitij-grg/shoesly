@@ -17,7 +17,7 @@ class _SplashBodyState extends State<SplashBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: context.colors.primary,
+      color: context.colors.white,
       width: appWidth(context),
       height: appHeight(context),
       alignment: Alignment.center,

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shoesly/core/utils/theme_extensions.dart';
 
-import '../../core/utils/theme_extensions.dart';
-
-class CustomSvgWidget extends StatelessWidget {
+class CustomNetworkSvgWidget extends StatelessWidget {
   final Color? color;
   final String icon;
   final double? height;
@@ -11,7 +10,7 @@ class CustomSvgWidget extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final double? width;
   final BoxFit fit;
-  const CustomSvgWidget(
+  const CustomNetworkSvgWidget(
       {super.key,
       this.color,
       required this.icon,
@@ -27,7 +26,7 @@ class CustomSvgWidget extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: padding,
-        child: SvgPicture.asset(
+        child: SvgPicture.network(
           fit: fit,
           icon,
           colorFilter: color != null

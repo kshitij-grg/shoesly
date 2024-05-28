@@ -2,27 +2,47 @@ import 'package:flutter/material.dart';
 
 // Uniform Colors to use throughout the app
 class AppThemeColors extends ThemeExtension<AppThemeColors> {
-  final Color? primary, white, secondary, tertiaryText;
+  final Color? primary,
+      white,
+      secondary,
+      tertiary,
+      primaryBackgroundColor,
+      warning,
+      secondaryBackgroundColor,
+      error;
 
   const AppThemeColors({
     required this.primary,
-    required this.tertiaryText,
+    required this.tertiary,
     required this.secondary,
     required this.white,
+    required this.primaryBackgroundColor,
+    required this.warning,
+    required this.error,
+    required this.secondaryBackgroundColor,
   });
 
   @override
   AppThemeColors copyWith({
     Color? primary,
     Color? secondary,
-    Color? tertiaryText,
+    Color? tertiary,
     Color? white,
+    Color? backgroundColor,
+    Color? error,
+    Color? warning,
+    Color? secondaryBackgroundColor,
   }) {
     return AppThemeColors(
       primary: primary ?? this.primary,
-      tertiaryText: tertiaryText ?? this.tertiaryText,
+      tertiary: tertiary ?? tertiary,
       white: white ?? this.white,
+      error: error ?? this.error,
+      primaryBackgroundColor: backgroundColor ?? primaryBackgroundColor,
       secondary: secondary ?? this.secondary,
+      warning: warning ?? this.warning,
+      secondaryBackgroundColor:
+          secondaryBackgroundColor ?? this.secondaryBackgroundColor,
     );
   }
 
@@ -33,9 +53,15 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     }
     return AppThemeColors(
       primary: Color.lerp(primary, other.primary, t),
-      tertiaryText: Color.lerp(tertiaryText, other.tertiaryText, t),
+      tertiary: Color.lerp(tertiary, other.tertiary, t),
+      error: Color.lerp(error, other.error, t),
+      secondaryBackgroundColor: Color.lerp(
+          secondaryBackgroundColor, other.secondaryBackgroundColor, t),
       secondary: Color.lerp(secondary, other.secondary, t),
       white: Color.lerp(white, other.white, t),
+      primaryBackgroundColor:
+          Color.lerp(primaryBackgroundColor, other.primaryBackgroundColor, t),
+      warning: Color.lerp(warning, other.warning, t),
     );
   }
 }

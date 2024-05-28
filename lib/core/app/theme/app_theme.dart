@@ -17,6 +17,8 @@ class AppTheme {
     ),
     extensions: AppThemeConfig.themeExtension(),
     iconTheme: AppThemeConfig.iconTheme(color: AppColors.kPRIMARY),
+    appBarTheme: AppThemeConfig.appBarTheme(backgroundColor: AppColors.kWHITE),
+    sliderTheme: AppThemeConfig.sliderThemeData(),
   );
   static final darkTheme = ThemeData(
     fontFamily: AppTexts.fontFamily,
@@ -29,5 +31,8 @@ class AppTheme {
     ),
     iconTheme: AppThemeConfig.iconTheme(color: AppColors.kWHITE),
     extensions: AppThemeConfig.themeExtension(isDarkTheme: true),
+    appBarTheme:
+        AppThemeConfig.appBarTheme(backgroundColor: AppColors.kPRIMARY),
+    sliderTheme: AppThemeConfig.sliderThemeData(),
   );
 }

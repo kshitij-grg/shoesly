@@ -7,8 +7,29 @@ import '../constants/app_fonts_size.dart';
 
 // This class stores the
 class AppThemeConfig {
+  static final elevatedButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      elevation: 2,
+      shadowColor: AppColors.kTRANSPARENT,
+      backgroundColor: AppColors.kPRIMARY,
+      foregroundColor: AppColors.kWHITE,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(100),
+      ),
+    ),
+  );
+
+  static AppBarTheme appBarTheme({required Color backgroundColor}) =>
+      AppBarTheme(
+        backgroundColor: backgroundColor,
+      );
+
   static IconThemeData iconTheme({required Color color}) =>
       IconThemeData(color: color);
+
+  static SliderThemeData sliderThemeData() => const SliderThemeData(
+        activeTickMarkColor: AppColors.kDARKSHADE100,
+      );
 
   static TextTheme textTheme({
     required Color primaryText, //For title.
@@ -84,9 +105,13 @@ class AppThemeConfig {
       [
         AppThemeColors(
           primary: isDarkTheme ? AppColors.kWHITE : AppColors.kPRIMARY,
-          tertiaryText: AppColors.kWHITESHADE300,
+          tertiary: AppColors.kWHITESHADE300,
           white: isDarkTheme ? AppColors.kPRIMARY : AppColors.kWHITE,
           secondary: AppColors.kWHITESHADE400,
+          primaryBackgroundColor: AppColors.kWHITESHADE200,
+          secondaryBackgroundColor: AppColors.kWHITESHADE100,
+          warning: AppColors.kWARNING,
+          error: AppColors.kERROR,
         ),
       ];
 }

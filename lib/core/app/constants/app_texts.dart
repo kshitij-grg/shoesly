@@ -11,4 +11,13 @@ class AppTexts {
 
   // Discover screen
   static const discover = "Discover";
+  static const all = "All";
+
+  // Filter Screen
+  static const filter = "FILTER";
+  static const brands = "Brands";
+  static const priceRange = "Price Range";
+  static const sortBy = "Sort By";
+  static const gender = "Gender";
+  static const color = "Color";
 }

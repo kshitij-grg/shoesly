@@ -5,6 +5,8 @@ import '../app/constants/app_dimensions.dart';
 // Class to make our app responsive to the respective devices such as Mobile and Tablet
 class Responsive extends StatelessWidget {
   static const double kHTabletMainPagePadding = 20;
+  static const double kAppBorderRadius = 20;
+  static const double kButtonHeight = 47;
   static const double kHMobilePhonePadding = 20.0;
   final Widget? child;
   final BuildContext context;
