@@ -15,6 +15,9 @@ dependencies:
   get_it: ^7.7.0
   cached_network_image: ^3.3.1
   flutter_svg: ^2.0.10+1
+  firebase_core: ^2.32.0
+  cloud_firestore: ^4.17.5
+  firebase_analytics: ^10.10.7
 
 dev_dependencies:
   flutter_test:

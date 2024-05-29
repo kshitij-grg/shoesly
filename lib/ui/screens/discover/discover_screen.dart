@@ -3,12 +3,11 @@ import 'package:shoesly/core/app/constants/app_dimensions.dart';
 import 'package:shoesly/core/app/constants/app_icons.dart';
 import 'package:shoesly/core/app/constants/app_texts.dart';
 import 'package:shoesly/core/enums/enum.dart';
-import 'package:shoesly/core/routes/route_navigator.dart';
 import 'package:shoesly/core/utils/responsive.dart';
 import 'package:shoesly/core/utils/system_ui_overlay_style.dart';
 import 'package:shoesly/core/utils/theme_extensions.dart';
+import 'package:shoesly/di_injection/get_di_init.dart';
 import 'package:shoesly/ui/screens/discover/components/discover_body.dart';
-import 'package:shoesly/ui/screens/discover/components/filter/components/filter_body.dart';
 import 'package:shoesly/ui/widgets/custom_button_widget.dart';
 
 class DiscoverScreen extends StatelessWidget {
@@ -21,7 +20,9 @@ class DiscoverScreen extends StatelessWidget {
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: CustomButton(buttonType: ButtonType.icon).widget(
-          runCode: () => RouteNavigator.navigate(context, const FilterBody()),
+          runCode: () =>
+              discoverRepository.initDiscoverScreen(context: context),
+          // runCode: () => RouteNavigator.navigate(context, const FilterBody()),
           context: context,
           width: appWidth(context) / 2.8,
           title: AppTexts.filter,

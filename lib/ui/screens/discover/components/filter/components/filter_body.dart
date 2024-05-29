@@ -6,6 +6,7 @@ import 'package:shoesly/core/app/constants/app_texts.dart';
 import 'package:shoesly/core/utils/responsive.dart';
 import 'package:shoesly/core/utils/theme_extensions.dart';
 import 'package:shoesly/ui/screens/discover/components/filter/components/widgets/custom_container_text_widget.dart';
+import 'package:shoesly/ui/screens/discover/components/filter/components/widgets/custom_range_slider_widget.dart';
 import 'package:shoesly/ui/widgets/custom_appbar_widget.dart';
 import 'package:shoesly/ui/widgets/custom_circle_widget.dart';
 import 'package:shoesly/ui/widgets/custom_svg_widget.dart';
@@ -77,15 +78,7 @@ class FilterBody extends StatelessWidget {
                 style: context.textTheme.headlineMedium,
               ),
               kVSizedBox2,
-              RangeSlider(
-                values: const RangeValues(200, 750),
-                min: 0,
-                max: 1750,
-                labels: const RangeLabels("\$0", "\$1750"),
-                onChanged: (value) {},
-                activeColor: context.colors.primary,
-                inactiveColor: context.colors.primaryBackgroundColor,
-              ),
+              const CustomRangeSliderWidget(),
               kVSizedBox2,
               CustomAppText(
                 text: AppTexts.sortBy,

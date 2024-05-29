@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoesly/core/app/constants/app_dimensions.dart';
 import 'package:shoesly/core/app/constants/app_fonts_size.dart';
 import 'package:shoesly/core/app/constants/app_icons.dart';
@@ -8,12 +9,20 @@ import 'package:shoesly/core/app/constants/app_images.dart';
 import 'package:shoesly/core/app/constants/app_styles.dart';
 import 'package:shoesly/core/app/constants/app_texts.dart';
 import 'package:shoesly/core/utils/theme_extensions.dart';
+import 'package:shoesly/di_injection/get_di_init.dart';
 import 'package:shoesly/ui/widgets/custom_circle_widget.dart';
 import 'package:shoesly/ui/widgets/custom_svg_widget.dart';
 
-class DiscoverBody extends StatelessWidget {
+import '../../../../bloc/brand/brand_bloc.dart';
+
+class DiscoverBody extends StatefulWidget {
   const DiscoverBody({super.key});
 
+  @override
+  State<DiscoverBody> createState() => _DiscoverBodyState();
+}
+
+class _DiscoverBodyState extends State<DiscoverBody> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -48,24 +57,29 @@ class DiscoverBody extends StatelessWidget {
             ],
           ),
           kVSizedBox2,
-          SizedBox(
-            height: 40,
-            child: ListView.separated(
-              itemCount: 20,
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              separatorBuilder: (context, index) => kHSizedBox2,
-              itemBuilder: (context, index) {
-                return Container(
-                  alignment: Alignment.center,
-                  child: CustomAppText(
-                    text: AppTexts.all,
-                    style: context.textTheme.headlineLarge,
-                  ),
-                );
-              },
-            ),
+          BlocBuilder<BrandBloc, BrandState>(
+            builder: (context, state) {
+              return SizedBox(
+                height: 40,
+                child: ListView.separated(
+                  itemCount: state.brandModelList?.length ?? 0,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  separatorBuilder: (context, index) => kHSizedBox2,
+                  itemBuilder: (context, index) {
+                    var model = state.brandModelList?[index];
+                    return Container(
+                      alignment: Alignment.center,
+                      child: CustomAppText(
+                        text: model?.name ?? '',
+                        style: context.textTheme.headlineLarge,
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           ),
           kVSizedBox2,
           Expanded(
@@ -148,5 +162,11 @@ class DiscoverBody extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    discoverRepository.initDiscoverScreen(context: context);
   }
 }
