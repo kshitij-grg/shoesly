@@ -15,6 +15,11 @@ class ShoeRepository {
       shoeApiClient.fetchShoes(filterModel: filterModel, hasFilter: hasFilter);
 
   initShoeScreen({required BuildContext context, required String shoeId}) {
-    context.read<ShoeBloc>().add(ShoeDetailsFetched(shoeId: shoeId));
+    var shoeBloc = context.read<ShoeBloc>();
+
+    shoeBloc.add(ShoeDetailsFetched(shoeId: shoeId));
+    shoeBloc.add(const ShoeImageSwitched());
+    shoeBloc.add(const ShoeSizeSelected(size: ""));
+    shoeBloc.add(const ShoeColorSelected(color: ""));
   }
 }

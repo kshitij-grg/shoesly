@@ -16,6 +16,14 @@ class ShoeBloc extends Bloc<ShoeEvent, ShoeState> {
     on<ShoeFetched>(_onShoeFetch);
     on<ShoeDetailsFetched>(_onShoeDetailsFetch);
     on<ShoeSizeSelected>(_onShoeSizeSelect);
+    on<ShoeImageSwitched>(_onShoeImageSwitch);
+    on<ShoeColorSelected>(_onShoeColorSelect);
+  }
+
+  _onShoeColorSelect(ShoeColorSelected event, Emitter<ShoeState> emit) async {
+    emit(state.copyWith(
+        shoeColor: event.color, colorSelectStatus: AppStatus.success));
+    emit(state.copyWith(colorSelectStatus: AppStatus.complete));
   }
 
   _onShoeDetailsFetch(ShoeDetailsFetched event, Emitter<ShoeState> emit) async {
@@ -52,9 +60,13 @@ class ShoeBloc extends Bloc<ShoeEvent, ShoeState> {
     }
   }
 
+  _onShoeImageSwitch(ShoeImageSwitched event, Emitter<ShoeState> emit) {
+    emit(state.copyWith(imageIndex: event.index));
+  }
+
   _onShoeSizeSelect(ShoeSizeSelected event, Emitter<ShoeState> emit) async {
     emit(state.copyWith(
-        shoeSize: event.size, shoeSelectStatus: AppStatus.success));
-    emit(state.copyWith(shoeSelectStatus: AppStatus.complete));
+        shoeSize: event.size, sizeSelectStatus: AppStatus.success));
+    emit(state.copyWith(sizeSelectStatus: AppStatus.complete));
   }
 }

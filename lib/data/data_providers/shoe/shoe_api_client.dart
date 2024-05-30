@@ -10,9 +10,8 @@ class ShoeApiClient {
         firebaseService.firebaseInstance.collection("shoes").doc(shoeId);
 
     DocumentSnapshot documentSnapshot = await ref.get();
-
     final response =
-        ShoeModel.fromJson(documentSnapshot as Map<String, dynamic>);
+        ShoeModel.fromJson(documentSnapshot.data() as Map<String, dynamic>);
 
     return response;
   }
@@ -26,10 +25,11 @@ class ShoeApiClient {
 
     QuerySnapshot querySnapshot = await filteredData.get();
 
-    final response = querySnapshot.docs
-        .map((e) => ShoeModel.fromJson(
-            (e.data() as Map<String, dynamic>).update("id", (value) => e.id)))
-        .toList();
+    final response = querySnapshot.docs.map((e) {
+      var shoeDetailsData = e.data() as Map<String, dynamic>;
+      shoeDetailsData["id"] = e.id;
+      return ShoeModel.fromJson(shoeDetailsData);
+    }).toList();
 
     return response;
   }

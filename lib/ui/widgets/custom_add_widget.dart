@@ -6,6 +6,7 @@ import 'package:shoesly/core/app/constants/app_texts.dart';
 import '../../core/app/constants/app_dimensions.dart';
 import '../../core/utils/responsive.dart';
 import '../../core/utils/theme_extensions.dart';
+import 'custom_border_text_widget.dart';
 import 'custom_button_widget.dart';
 
 class CustomAddWidget extends StatelessWidget {
@@ -48,41 +49,25 @@ class CustomAddWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (hasBtn) ...[
-            Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  border: Border.all(
-                    color: context.colors.primaryBackgroundColor!,
+          Expanded(
+            flex: hasBtn ? 2 : 1,
+            child: hasBtn
+                ? const CustomBorderTextWidget()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomAppText(
+                        text: AppTexts.price,
+                        style: context.textTheme.bodySmall!
+                            .copyWith(color: context.colors.tertiary),
+                      ),
+                      CustomAppText(
+                        text: "\$$leadTitle",
+                        style: context.textTheme.headlineLarge,
+                      ),
+                    ],
                   ),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 13),
-                alignment: Alignment.center,
-                child: const CustomAppText(
-                  text: "RESET",
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ] else ...[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomAppText(
-                  text: AppTexts.price,
-                  style: context.textTheme.bodySmall!
-                      .copyWith(color: context.colors.tertiary),
-                ),
-                CustomAppText(
-                  text: "\$235.00",
-                  style: context.textTheme.headlineLarge,
-                ),
-              ],
-            )
-          ],
+          ),
           kHSizedBox2,
           Expanded(
             flex: 3,

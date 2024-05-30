@@ -27,4 +27,5 @@ class AppTexts {
   static const size = "Size";
   static const description = "Description";
   static const review = "Review";
+  static const seeAllReview = "SEE ALL REVIEW";
 }

@@ -1,5 +1,10 @@
 part of 'shoe_bloc.dart';
 
+class ShoeColorSelected extends ShoeEvent {
+  final String? color;
+  const ShoeColorSelected({this.color});
+}
+
 class ShoeDetailsFetched extends ShoeEvent {
   final String shoeId;
 
@@ -21,6 +26,12 @@ class ShoeFetched extends ShoeEvent {
     this.filterModel,
     this.hasFilter = true,
   });
+}
+
+class ShoeImageSwitched extends ShoeEvent {
+  final int index;
+
+  const ShoeImageSwitched({this.index = 0});
 }
 
 class ShoeSizeSelected extends ShoeEvent {

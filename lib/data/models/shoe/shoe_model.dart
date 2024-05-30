@@ -28,12 +28,14 @@ class Review {
   final String? username;
   final String? image;
   final String? rating;
+  final DateTime? createAt;
   final String? description;
 
   Review({
     this.username,
     this.image,
     this.rating,
+    this.createAt,
     this.description,
   });
 
@@ -42,14 +44,11 @@ class Review {
         image: json["image"],
         rating: json["rating"],
         description: json["description"],
+        createAt: json["createAt"] == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(
+                (json["createAt"] as Timestamp).millisecondsSinceEpoch),
       );
-
-  Map<String, dynamic> toJson() => {
-        "username": username,
-        "image": image,
-        "rating": rating,
-        "description": description,
-      };
 }
 
 class ShoeModel {

@@ -52,7 +52,7 @@ class CustomAppbarWidget {
                   maintainSize: true,
                   maintainState: true,
                   maintainAnimation: true,
-                  visible: false,
+                  visible: trailing != null,
                   child: trailing ?? const Text("data"),
                 ),
               ],

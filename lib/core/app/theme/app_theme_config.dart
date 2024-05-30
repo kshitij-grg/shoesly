@@ -115,6 +115,7 @@ class AppThemeConfig {
           secondaryBackgroundColor: AppColors.kWHITESHADE100,
           warning: AppColors.kWARNING,
           error: AppColors.kERROR,
+          information: AppColors.kINFORMATION,
         ),
       ];
 }

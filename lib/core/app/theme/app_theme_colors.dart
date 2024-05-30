@@ -9,6 +9,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       primaryBackgroundColor,
       warning,
       secondaryBackgroundColor,
+      information,
       error;
 
   const AppThemeColors({
@@ -20,6 +21,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     required this.warning,
     required this.error,
     required this.secondaryBackgroundColor,
+    required this.information,
   });
 
   @override
@@ -31,6 +33,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     Color? backgroundColor,
     Color? error,
     Color? warning,
+    Color? information,
     Color? secondaryBackgroundColor,
   }) {
     return AppThemeColors(
@@ -41,6 +44,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       primaryBackgroundColor: backgroundColor ?? primaryBackgroundColor,
       secondary: secondary ?? this.secondary,
       warning: warning ?? this.warning,
+      information: information ?? this.information,
       secondaryBackgroundColor:
           secondaryBackgroundColor ?? this.secondaryBackgroundColor,
     );
@@ -54,6 +58,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     return AppThemeColors(
       primary: Color.lerp(primary, other.primary, t),
       tertiary: Color.lerp(tertiary, other.tertiary, t),
+      information: Color.lerp(information, other.information, t),
       error: Color.lerp(error, other.error, t),
       secondaryBackgroundColor: Color.lerp(
           secondaryBackgroundColor, other.secondaryBackgroundColor, t),

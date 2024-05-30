@@ -5,6 +5,7 @@ final kArrowLeftIcon = _getBasePath("ArrowLeft.svg");
 final kCartIcon = _getBasePath("Cart.svg");
 final kCloseIcon = _getBasePath("Close.svg");
 final kDoneIcon = _getBasePath("Done.svg");
+final kDoneVariantIcon = _getBasePath("DoneVariant.svg");
 final kFilterIcon = _getBasePath("Filter.svg");
 final kNikeIcon = _getBasePath("Nike.svg");
 final kStarIcon = _getBasePath("Star.svg");

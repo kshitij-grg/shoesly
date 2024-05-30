@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoesly/core/app/constants/app_colors.dart';
 import 'package:shoesly/core/app/constants/app_dimensions.dart';
-import 'package:shoesly/core/app/constants/app_images.dart';
+import 'package:shoesly/core/app/constants/app_icons.dart';
 import 'package:shoesly/core/app/constants/app_styles.dart';
 import 'package:shoesly/core/app/constants/app_texts.dart';
+import 'package:shoesly/core/routes/route_navigator.dart';
 import 'package:shoesly/core/utils/responsive.dart';
 import 'package:shoesly/core/utils/theme_extensions.dart';
 import 'package:shoesly/di_injection/get_di_init.dart';
+import 'package:shoesly/ui/screens/shoe/components/review/review_body.dart';
 import 'package:shoesly/ui/widgets/custom_add_widget.dart';
+import 'package:shoesly/ui/widgets/custom_border_text_widget.dart';
 import 'package:shoesly/ui/widgets/custom_circle_widget.dart';
+import 'package:shoesly/ui/widgets/custom_network_widget.dart';
+import 'package:shoesly/ui/widgets/custom_svg_widget.dart';
 
 import '../../../../bloc/shoe/shoe_bloc.dart';
+import '../../../../core/enums/enum.dart';
+import '../../../../core/utils/date_formatter.dart';
+import '../../../widgets/custom_circular_widget.dart';
+import '../../../widgets/custom_data_not_found_wigdet.dart';
 import '../../../widgets/custom_rating_widget.dart';
 
 class ShoeBody extends StatefulWidget {
@@ -24,109 +35,270 @@ class ShoeBody extends StatefulWidget {
 class _ShoeBodyState extends State<ShoeBody> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Responsive(
-              context: context,
-              child: BlocBuilder<ShoeBloc, ShoeState>(
-                builder: (context, state) {
-                  var model = state.shoeModel;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: context.colors.primaryBackgroundColor,
-                        ),
-                        height: appHeight(context) * .35,
-                        width: appWidth(context),
-                        padding: const EdgeInsets.all(15),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Image.asset(
-                                kShoe1Image,
-                                // height: 90,
-                                // width: 100,
-                              ),
-                            )
-                          ],
-                        ),
+    return BlocBuilder<ShoeBloc, ShoeState>(
+      builder: (context, state) {
+        var model = state.shoeModel;
+        return switch (state.fetchShoeDetailsStatus) {
+          AppStatus.loading => const CustomCircularIndicatorWidget(),
+          AppStatus.error => const CustomDataNotFoundWidget(),
+          _ => Column(
+              children: [
+                Expanded(
+                  child: Responsive(
+                    context: context,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: context.colors.primaryBackgroundColor,
+                            ),
+                            height: appHeight(context) * .35,
+                            width: appWidth(context),
+                            padding: const EdgeInsets.all(15),
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                PageView.builder(
+                                  controller: PageController(),
+                                  itemCount: model?.images?.length,
+                                  itemBuilder: (context, index) {
+                                    var imageModel = model?.images?[index];
+
+                                    return CustomNetworkImageWidget(
+                                      imageUrl: imageModel,
+                                    );
+                                  },
+                                  onPageChanged: (value) => context
+                                      .read<ShoeBloc>()
+                                      .add(ShoeImageSwitched(index: value)),
+                                ),
+                                Positioned(
+                                  left: 0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: (model?.images ?? [])
+                                        .asMap()
+                                        .entries
+                                        .map((entry) {
+                                      return Container(
+                                        width: 8,
+                                        height: 8,
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 4.0),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: state.imageIndex == entry.key
+                                              ? context.colors.primary
+                                              : context.colors.tertiary,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: context.colors.white,
+                                    ),
+                                    height: 40,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        var colorModel = model?.colors?[index];
+                                        bool isSelected =
+                                            state.shoeColor == colorModel;
+
+                                        return GestureDetector(
+                                          onTap: () => context
+                                              .read<ShoeBloc>()
+                                              .add(ShoeColorSelected(
+                                                  color: colorModel)),
+                                          child: CustomCircleWidget(
+                                            width: 20,
+                                            backgroundColor: getImageColor(
+                                                color: colorModel),
+                                            padding: const EdgeInsets.all(5),
+                                            child: isSelected
+                                                ? CustomSvgWidget(
+                                                    icon: kDoneVariantIcon,
+                                                    width: 10,
+                                                    height: 10,
+                                                    color: AppColors.kWHITE,
+                                                  )
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          kHSizedBox1,
+                                      itemCount: model?.colors?.length ?? 0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          kVSizedBox2,
+                          CustomAppText(
+                            text: model?.name ?? '',
+                            style: context.textTheme.headlineLarge,
+                          ),
+                          kVSizedBox1,
+                          CustomRatingWidget(model: model),
+                          kVSizedBox2,
+                          CustomAppText(
+                            text: AppTexts.size,
+                            style: context.textTheme.headlineMedium,
+                          ),
+                          kVSizedBox1,
+                          SizedBox(
+                            height: 40,
+                            child: ListView.separated(
+                              itemBuilder: (context, index) {
+                                var sizeModel = model?.sizes?[index];
+                                bool isSelected = state.shoeSize == sizeModel;
+                                return GestureDetector(
+                                  onTap: () => context
+                                      .read<ShoeBloc>()
+                                      .add(ShoeSizeSelected(size: sizeModel)),
+                                  child: CustomCircleWidget(
+                                    padding: const EdgeInsets.all(10),
+                                    backgroundColor: isSelected
+                                        ? context.colors.primary
+                                        : null,
+                                    width: 40,
+                                    hasBorder: !isSelected,
+                                    child: CustomAppText(
+                                      text: sizeModel ?? '',
+                                      color: isSelected
+                                          ? context.colors.white
+                                          : context.colors.secondary,
+                                    ),
+                                  ),
+                                );
+                              },
+                              padding: EdgeInsets.zero,
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) => kHSizedBox2,
+                              itemCount: model?.sizes?.length ?? 5,
+                            ),
+                          ),
+                          kVSizedBox2,
+                          CustomAppText(
+                            text: AppTexts.description,
+                            style: context.textTheme.headlineMedium,
+                          ),
+                          kVSizedBox1,
+                          CustomAppText(
+                            text: model?.description ?? "",
+                            textAlign: TextAlign.left,
+                            color: context.colors.secondary,
+                          ),
+                          kVSizedBox2,
+                          CustomAppText(
+                            text:
+                                "${AppTexts.review} (${model?.reviews?.length ?? 0})",
+                            style: context.textTheme.headlineMedium,
+                          ),
+                          kVSizedBox1,
+                          ListView.separated(
+                            itemBuilder: (context, index) {
+                              var reviewModel = model?.reviews?[index];
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomNetworkImageWidget(
+                                    imageUrl: reviewModel?.image,
+                                  ),
+                                  kHSizedBox2,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CustomAppText(
+                                              text: reviewModel?.username ?? '',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            CustomAppText(
+                                              text: DateFormatter.timeAgo(
+                                                  reviewModel?.createAt),
+                                              style: context
+                                                  .textTheme.bodySmall!
+                                                  .copyWith(
+                                                      color: context
+                                                          .colors.tertiary),
+                                            ),
+                                          ],
+                                        ),
+                                        kVSizedBox0,
+                                        CustomRatingWidget(model: model),
+                                        kVSizedBox0,
+                                        CustomAppText(
+                                          text: reviewModel?.description ?? '',
+                                          style: context.textTheme.bodySmall,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            separatorBuilder: (context, index) => kVSizedBox2,
+                            itemCount: (model?.reviews?.length ?? 0) > 3
+                                ? 3
+                                : model?.reviews?.length ?? 0,
+                          ),
+                          kVSizedBox3,
+                          GestureDetector(
+                            onTap: () => RouteNavigator.navigate(
+                                context, const ReviewBody()),
+                            child: const CustomBorderTextWidget(
+                              title: AppTexts.seeAllReview,
+                            ),
+                          )
+                        ],
                       ),
-                      kVSizedBox2,
-                      CustomAppText(
-                        text: "Jordan 1 Retro High Tie Dye",
-                        style: context.textTheme.headlineLarge,
-                      ),
-                      kVSizedBox1,
-                      CustomRatingWidget(model: model),
-                      kVSizedBox2,
-                      CustomAppText(
-                        text: AppTexts.size,
-                        style: context.textTheme.headlineMedium,
-                      ),
-                      kHSizedBox1,
-                      SizedBox(
-                        height: 40,
-                        child: ListView.separated(
-                          itemBuilder: (context, index) {
-                            var sizeModel = model?.sizes?[index];
-                            bool isSelected = state.shoeSize == sizeModel;
-                            return CustomCircleWidget(
-                              padding: const EdgeInsets.all(10),
-                              backgroundColor:
-                                  isSelected ? context.colors.primary : null,
-                              width: 40,
-                              hasBorder: true,
-                              child: CustomAppText(
-                                text: "41",
-                                color: isSelected
-                                    ? context.colors.white
-                                    : context.colors.secondary,
-                              ),
-                            );
-                          },
-                          padding: EdgeInsets.zero,
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          separatorBuilder: (context, index) => kHSizedBox2,
-                          itemCount: model?.sizes?.length ?? 5,
-                        ),
-                      ),
-                      kVSizedBox2,
-                      CustomAppText(
-                        text: AppTexts.description,
-                        style: context.textTheme.headlineMedium,
-                      ),
-                      kVSizedBox1,
-                      CustomAppText(
-                        text: model?.description ?? "",
-                        textAlign: TextAlign.left,
-                        color: context.colors.secondary,
-                      ),
-                      kVSizedBox2,
-                      CustomAppText(
-                        text:
-                            "${AppTexts.review} (${model?.reviews?.length ?? 0})",
-                        style: context.textTheme.headlineMedium,
-                      ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                  ),
+                ),
+                CustomAddWidget(
+                  trailTitle: AppTexts.addToCart,
+                  hasBtn: false,
+                  leadTitle: "${model?.price ?? 0}",
+                ),
+              ],
             ),
-          ),
-        ),
-        const CustomAddWidget(
-          trailTitle: AppTexts.addToCart,
-          hasBtn: false,
-        ),
-      ],
+        };
+      },
     );
+  }
+
+  Color? getImageColor({String? color}) {
+    return switch (color) {
+      "Red" => context.colors.error,
+      "Blue" => context.colors.information,
+      _ => context.colors.primary,
+    };
   }
 
   @override
