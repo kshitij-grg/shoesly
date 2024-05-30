@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-ShoeModel shoeModelFromJson(String str) => ShoeModel.fromJson(json.decode(str));
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-String shoeModelToJson(ShoeModel data) => json.encode(data.toJson());
+ShoeModel shoeModelFromJson(String str) => ShoeModel.fromJson(json.decode(str));
 
 class BrandInfo {
   final String? brandImage;
@@ -63,6 +63,7 @@ class ShoeModel {
   final int? availableQuantity;
   final int? price;
   final String? id;
+  final String? gender;
   final List<String>? sizes;
 
   ShoeModel({
@@ -74,6 +75,7 @@ class ShoeModel {
     this.description,
     this.name,
     this.availableQuantity,
+    this.gender,
     this.price,
     this.id,
     this.sizes,
@@ -92,12 +94,14 @@ class ShoeModel {
             : List<String>.from(json["colors"]!.map((x) => x)),
         createdAt: json["createdAt"] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
+            : DateTime.fromMillisecondsSinceEpoch(
+                (json["createdAt"] as Timestamp).millisecondsSinceEpoch),
         images: json["images"] == null
             ? []
             : List<String>.from(json["images"]!.map((x) => x)),
         description: json["description"],
         name: json["name"],
+        gender: json["gender"],
         availableQuantity: json["availableQuantity"],
         price: json["price"],
         id: json["id"],
@@ -105,22 +109,4 @@ class ShoeModel {
             ? []
             : List<String>.from(json["sizes"]!.map((x) => x)),
       );
-
-  Map<String, dynamic> toJson() => {
-        "reviews": reviews == null
-            ? []
-            : List<dynamic>.from(reviews!.map((x) => x.toJson())),
-        "brandInfo": brandInfo?.toJson(),
-        "colors":
-            colors == null ? [] : List<dynamic>.from(colors!.map((x) => x)),
-        "createdAt": createdAt?.toIso8601String(),
-        "images":
-            images == null ? [] : List<dynamic>.from(images!.map((x) => x)),
-        "description": description,
-        "name": name,
-        "availableQuantity": availableQuantity,
-        "price": price,
-        "id": id,
-        "sizes": sizes == null ? [] : List<dynamic>.from(sizes!.map((x) => x)),
-      };
 }

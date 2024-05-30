@@ -13,21 +13,30 @@ part 'brand_state.dart';
 class BrandBloc extends Bloc<BrandEvent, BrandState> {
   BrandBloc() : super(const BrandState()) {
     on<BrandFetched>(_onBrandFetch);
+    on<BrandSelected>(_onBrandSelect);
   }
 
   _onBrandFetch(BrandFetched event, Emitter<BrandState> emit) async {
     try {
-      emit(state.copyWith(brandStatus: AppStatus.loading));
-      var response = await brandRepository.fetchBrands();
+      emit(state.copyWith(fetchBrandStatus: AppStatus.loading));
+      var response =
+          await brandRepository.fetchBrands(hasAllKeyword: event.hasAllKeyword);
 
       if (response.isNotEmpty) {
         emit(state.copyWith(
-            brandModelList: response, brandStatus: AppStatus.success));
-        emit(state.copyWith(brandStatus: AppStatus.complete));
+            brandModelList: response, fetchBrandStatus: AppStatus.success));
+        return emit(state.copyWith(fetchBrandStatus: AppStatus.complete));
       }
-      emit(state.copyWith(brandStatus: AppStatus.error));
+      emit(state.copyWith(fetchBrandStatus: AppStatus.error));
     } catch (e) {
       log(e.toString());
     }
+  }
+
+  _onBrandSelect(BrandSelected event, Emitter<BrandState> emit) {
+    emit(state.copyWith(
+        selectedBrand: event.selectedBrand,
+        brandSelectedstatus: AppStatus.success));
+    emit(state.copyWith(brandSelectedstatus: AppStatus.complete));
   }
 }

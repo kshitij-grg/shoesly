@@ -5,7 +5,10 @@ import 'package:shoesly/di_injection/get_di_init.dart';
 import '../../../core/app/constants/app_texts.dart';
 
 class BrandApiClient {
-  Future<List<BrandModel>> fetchBrands() async {
+  Future<List<BrandModel>> fetchBrands({bool hasAllKeyword = false}) async {
+    List<BrandModel> responseWithAll = [];
+    List<BrandModel> tempResponse = [];
+
     final ref = firebaseService.firebaseInstance.collection("brands");
 
     QuerySnapshot querySnapshot = await ref.get();
@@ -14,8 +17,11 @@ class BrandApiClient {
         .map((e) => BrandModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
 
-    response.insert(0, BrandModel(name: AppTexts.all));
+    if (hasAllKeyword) {
+      tempResponse = response;
+      responseWithAll = tempResponse..insert(0, BrandModel(name: AppTexts.all));
+    }
 
-    return response;
+    return hasAllKeyword ? responseWithAll : response;
   }
 }

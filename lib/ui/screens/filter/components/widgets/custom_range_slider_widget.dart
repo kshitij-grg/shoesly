@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../core/app/constants/app_dimensions.dart';
-import '../../../../../../../core/app/constants/app_styles.dart';
+import '../../../../../core/app/constants/app_dimensions.dart';
+import '../../../../../core/app/constants/app_styles.dart';
 
 class CustomRangeSliderWidget extends StatefulWidget {
   final double minItemPrice;

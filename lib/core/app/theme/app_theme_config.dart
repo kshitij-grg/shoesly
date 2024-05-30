@@ -27,6 +27,9 @@ class AppThemeConfig {
   static IconThemeData iconTheme({required Color color}) =>
       IconThemeData(color: color);
 
+  static progressIndicatorTheme({Color? color}) =>
+      ProgressIndicatorThemeData(color: color);
+
   static SliderThemeData sliderThemeData() => const SliderThemeData(
         activeTickMarkColor: AppColors.kDARKSHADE100,
       );

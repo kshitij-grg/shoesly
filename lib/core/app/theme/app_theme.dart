@@ -19,6 +19,8 @@ class AppTheme {
     iconTheme: AppThemeConfig.iconTheme(color: AppColors.kPRIMARY),
     appBarTheme: AppThemeConfig.appBarTheme(backgroundColor: AppColors.kWHITE),
     sliderTheme: AppThemeConfig.sliderThemeData(),
+    progressIndicatorTheme:
+        AppThemeConfig.progressIndicatorTheme(color: AppColors.kPRIMARY),
   );
   static final darkTheme = ThemeData(
     fontFamily: AppTexts.fontFamily,
@@ -34,5 +36,7 @@ class AppTheme {
     appBarTheme:
         AppThemeConfig.appBarTheme(backgroundColor: AppColors.kPRIMARY),
     sliderTheme: AppThemeConfig.sliderThemeData(),
+    progressIndicatorTheme:
+        AppThemeConfig.progressIndicatorTheme(color: AppColors.kWHITE),
   );
 }

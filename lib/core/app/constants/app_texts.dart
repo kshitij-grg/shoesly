@@ -20,4 +20,11 @@ class AppTexts {
   static const sortBy = "Sort By";
   static const gender = "Gender";
   static const color = "Color";
+
+  // Shoe screen
+  static const addToCart = "ADD TO CART";
+  static const price = "Price";
+  static const size = "Size";
+  static const description = "Description";
+  static const review = "Review";
 }

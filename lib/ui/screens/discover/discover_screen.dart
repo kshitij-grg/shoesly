@@ -6,9 +6,11 @@ import 'package:shoesly/core/enums/enum.dart';
 import 'package:shoesly/core/utils/responsive.dart';
 import 'package:shoesly/core/utils/system_ui_overlay_style.dart';
 import 'package:shoesly/core/utils/theme_extensions.dart';
-import 'package:shoesly/di_injection/get_di_init.dart';
 import 'package:shoesly/ui/screens/discover/components/discover_body.dart';
 import 'package:shoesly/ui/widgets/custom_button_widget.dart';
+
+import '../../../core/routes/route_config.dart';
+import '../../../core/routes/route_navigator.dart';
 
 class DiscoverScreen extends StatelessWidget {
   const DiscoverScreen({super.key});
@@ -21,8 +23,7 @@ class DiscoverScreen extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: CustomButton(buttonType: ButtonType.icon).widget(
           runCode: () =>
-              discoverRepository.initDiscoverScreen(context: context),
-          // runCode: () => RouteNavigator.navigate(context, const FilterBody()),
+              RouteNavigator.navigateNamed(context, RouteConfig.filterRoute),
           context: context,
           width: appWidth(context) / 2.8,
           title: AppTexts.filter,

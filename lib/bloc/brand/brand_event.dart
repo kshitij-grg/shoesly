@@ -7,4 +7,13 @@ sealed class BrandEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class BrandFetched extends BrandEvent {}
+class BrandFetched extends BrandEvent {
+  final bool hasAllKeyword;
+
+  const BrandFetched({this.hasAllKeyword = false});
+}
+
+class BrandSelected extends BrandEvent {
+  final String? selectedBrand;
+  const BrandSelected({this.selectedBrand});
+}

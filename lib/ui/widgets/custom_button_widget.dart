@@ -6,7 +6,6 @@ import '../../core/app/constants/app_styles.dart';
 import '../../core/enums/enum.dart';
 import '../../core/utils/keyboard_action.dart';
 import '../../core/utils/responsive.dart';
-import '../../core/utils/theme_extensions.dart';
 import 'custom_svg_widget.dart';
 
 class CIconButton implements CustomButton {
@@ -39,7 +38,6 @@ class CIconButton implements CustomButton {
     double? borderRadius,
     double iconHeight = 20,
     double iconWidth = 20,
-    bool isEnabled = true,
     bool hasTrailIcon = false,
     Color? backGroundColor,
     Color? iconColor,
@@ -110,33 +108,27 @@ class CNormalButton implements CustomButton {
     double? borderRadius,
     double? iconHeight,
     double? iconWidth,
-    bool isEnabled = true,
     bool? hasTrailIcon,
     Color? backGroundColor,
     Color? iconColor,
     Color? titleColor,
   }) {
-    var buttonTitleColor = isEnabled
-        ? titleColor ?? AppColors.kWHITE
-        : context.textTheme.bodySmall?.color;
     return Container(
       margin: margin,
       height: height ?? Responsive.kButtonHeight,
       width: width ?? double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          elevation: isEnabled ? elevation : 0,
-          backgroundColor: isEnabled ? backGroundColor : context.colors.primary,
+          elevation: elevation,
+          backgroundColor: backGroundColor,
         ),
         onPressed: () {
           KeyboardAction.unfocus(context);
-          if (isEnabled) {
-            runCode();
-          }
+          runCode();
         },
         child: CustomAppText(
           text: "$title",
-          color: buttonTitleColor,
+          color: titleColor,
           fontSize: fontSize,
           fontWeight: fontWeight,
         ),
@@ -167,7 +159,6 @@ abstract class CustomButton {
     final double? width,
     final double iconHeight,
     final double iconWidth,
-    final bool isEnabled,
     final bool hasTrailIcon,
     final Color? backGroundColor,
     final Color? iconColor,

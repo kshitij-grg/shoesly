@@ -1,19 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoesly/core/app/constants/app_dimensions.dart';
 import 'package:shoesly/core/app/constants/app_fonts_size.dart';
 import 'package:shoesly/core/app/constants/app_icons.dart';
-import 'package:shoesly/core/app/constants/app_images.dart';
 import 'package:shoesly/core/app/constants/app_styles.dart';
 import 'package:shoesly/core/app/constants/app_texts.dart';
+import 'package:shoesly/core/routes/route_config.dart';
+import 'package:shoesly/core/routes/route_navigator.dart';
 import 'package:shoesly/core/utils/theme_extensions.dart';
+import 'package:shoesly/data/models/filter/filter_model.dart';
 import 'package:shoesly/di_injection/get_di_init.dart';
 import 'package:shoesly/ui/widgets/custom_circle_widget.dart';
+import 'package:shoesly/ui/widgets/custom_circular_widget.dart';
+import 'package:shoesly/ui/widgets/custom_data_not_found_wigdet.dart';
+import 'package:shoesly/ui/widgets/custom_network_svg_widget.dart';
+import 'package:shoesly/ui/widgets/custom_network_widget.dart';
 import 'package:shoesly/ui/widgets/custom_svg_widget.dart';
 
 import '../../../../bloc/brand/brand_bloc.dart';
+import '../../../../bloc/shoe/shoe_bloc.dart';
+import '../../../../core/enums/enum.dart';
+import '../../../widgets/custom_rating_widget.dart';
 
 class DiscoverBody extends StatefulWidget {
   const DiscoverBody({super.key});
@@ -57,7 +64,16 @@ class _DiscoverBodyState extends State<DiscoverBody> {
             ],
           ),
           kVSizedBox2,
-          BlocBuilder<BrandBloc, BrandState>(
+          BlocConsumer<BrandBloc, BrandState>(
+            listener: (context, state) {
+              bool hasFiler = state.selectedBrand != AppTexts.all;
+
+              if (state.brandSelectedstatus == AppStatus.success) {
+                context.read<ShoeBloc>().add(ShoeFetched(
+                    filterModel: FilterModel(brand: state.selectedBrand),
+                    hasFilter: hasFiler));
+              }
+            },
             builder: (context, state) {
               return SizedBox(
                 height: 40,
@@ -69,11 +85,19 @@ class _DiscoverBodyState extends State<DiscoverBody> {
                   separatorBuilder: (context, index) => kHSizedBox2,
                   itemBuilder: (context, index) {
                     var model = state.brandModelList?[index];
-                    return Container(
-                      alignment: Alignment.center,
-                      child: CustomAppText(
-                        text: model?.name ?? '',
-                        style: context.textTheme.headlineLarge,
+                    bool isSelected = state.selectedBrand == model?.name;
+                    return GestureDetector(
+                      onTap: () => context
+                          .read<BrandBloc>()
+                          .add(BrandSelected(selectedBrand: model?.name)),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: CustomAppText(
+                          text: model?.name ?? '',
+                          style: context.textTheme.headlineLarge!.copyWith(
+                            color: isSelected ? null : context.colors.tertiary,
+                          ),
+                        ),
                       ),
                     );
                   },
@@ -83,79 +107,79 @@ class _DiscoverBodyState extends State<DiscoverBody> {
           ),
           kVSizedBox2,
           Expanded(
-            child: GridView.builder(
-              itemCount: 20,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisExtent: 225,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 30,
-              ),
-              padding: EdgeInsets.zero,
-              itemBuilder: (context, index) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: context.colors.primaryBackgroundColor,
+            child: BlocBuilder<ShoeBloc, ShoeState>(
+              builder: (context, state) {
+                return switch (state.fetchShoeStatus) {
+                  AppStatus.loading => const CustomCircularIndicatorWidget(),
+                  AppStatus.error => const CustomDataNotFoundWidget(),
+                  _ => GridView.builder(
+                      itemCount: state.shoeModelList?.length ?? 0,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisExtent: 225,
+                        crossAxisSpacing: 15,
+                        mainAxisSpacing: 30,
                       ),
-                      height: 150,
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomSvgWidget(
-                            icon: kNikeIcon,
-                            color: context.colors.tertiary,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        var model = state.shoeModelList?[index];
+                        return GestureDetector(
+                          onTap: () => RouteNavigator.navigateNamed(
+                            context,
+                            RouteConfig.shoeRoute,
+                            arguments: state.shoeModelList?.last
+                                .id, //only because we have inserted all the required details in only one shoe otherwise use model?.id
                           ),
-                          Image.asset(
-                            kShoe1Image,
-                            fit: BoxFit.contain,
-                            height: 90,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: context.colors.primaryBackgroundColor,
+                                ),
+                                height: 150,
+                                width: 150,
+                                padding: const EdgeInsets.all(15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomNetworkSvgWidget(
+                                      icon: model?.brandInfo?.brandImage ?? '',
+                                      color: context.colors.tertiary,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: CustomNetworkImageWidget(
+                                        imageUrl: model?.images?.first,
+                                        height: 90,
+                                        width: 100,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              kVSizedBox1,
+                              CustomAppText(
+                                text: model?.name ?? '',
+                                style: context.textTheme.bodySmall,
+                                maxLines: 1,
+                              ),
+                              kVSizedBox0,
+                              CustomRatingWidget(model: model),
+                              kVSizedBox0,
+                              CustomAppText(
+                                text: "\$${model?.price ?? 0}",
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    kVSizedBox1,
-                    CustomAppText(
-                      text: "Jordan 1 Retro High Tie Dye",
-                      style: context.textTheme.bodySmall,
-                      maxLines: 1,
-                    ),
-                    kVSizedBox0,
-                    Row(
-                      children: [
-                        CustomSvgWidget(
-                          icon: kStarIcon,
-                          height: 12,
-                          width: 12,
-                          color: context.colors.warning,
-                        ),
-                        kHSizedBox0,
-                        CustomAppText(
-                          text: "4.5",
-                          style: context.textTheme.labelLarge!.copyWith(
-                            color: context.colors.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        kHSizedBox0,
-                        CustomAppText(
-                          text: "(1045 Reviews)",
-                          style: context.textTheme.labelLarge,
-                        ),
-                      ],
-                    ),
-                    kVSizedBox0,
-                    const CustomAppText(
-                      text: "\$235,00",
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                );
+                        );
+                      },
+                    )
+                };
               },
             ),
           ),

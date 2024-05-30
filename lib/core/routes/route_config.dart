@@ -2,4 +2,6 @@
 class RouteConfig {
   static const initialRoute = '/';
   static const discoverRoute = '/discover_screen';
+  static const filterRoute = '/filter_screen';
+  static const shoeRoute = '/shoe_screen';
 }
