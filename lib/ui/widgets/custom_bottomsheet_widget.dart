@@ -11,7 +11,6 @@ customBottomSheetWidget(
     {String? sheetTitle,
     Widget? widgetBody,
     required BuildContext context,
-    Widget? customHeaderWidget,
     bool enableSecondaryHeader = false,
     bool isScrollControlled = true,
     bool? onlyRightWidget,
@@ -20,7 +19,7 @@ customBottomSheetWidget(
     Function()? onPressedCancel,
     Function()? onPressedDone,
     bool showTop = true}) async {
-  var titleMediumStyle = context.textTheme.headlineMedium;
+  var titleMediumStyle = context.textTheme.headlineLarge;
   await showModalBottomSheet(
       enableDrag: true,
       useSafeArea: true,
@@ -47,11 +46,11 @@ customBottomSheetWidget(
                   ),
                 ),
               Container(
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                     left: Responsive.kHMobilePhonePadding,
                     right: Responsive.kHMobilePhonePadding,
                     top: 14,
-                    bottom: (customHeaderWidget != null) ? 12 : 0),
+                    bottom: 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

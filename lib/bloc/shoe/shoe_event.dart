@@ -38,3 +38,13 @@ class ShoeSizeSelected extends ShoeEvent {
   final String? size;
   const ShoeSizeSelected({this.size});
 }
+
+class ShoeStepperDecrement extends ShoeEvent {
+  final int? index;
+  const ShoeStepperDecrement({this.index});
+}
+
+class ShoeStepperIncrement extends ShoeEvent {
+  final int? index;
+  const ShoeStepperIncrement({this.index});
+}

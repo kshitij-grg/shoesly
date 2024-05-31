@@ -12,7 +12,7 @@ import 'custom_button_widget.dart';
 class CustomAddWidget extends StatelessWidget {
   final String? leadTitle, trailTitle;
   final Function()? leadOnTap, trailOnTap;
-  final bool canUpdateCreate, hasBtn;
+  final bool canUpdateCreate, hasBtn, hasDecoration;
   final Color? trailBackGroundColor;
 
   const CustomAddWidget({
@@ -22,6 +22,7 @@ class CustomAddWidget extends StatelessWidget {
     this.leadOnTap,
     this.trailOnTap,
     this.hasBtn = true,
+    this.hasDecoration = true,
     this.trailBackGroundColor,
     this.canUpdateCreate = true,
   });
@@ -31,21 +32,24 @@ class CustomAddWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
           vertical: 13, horizontal: Responsive.kHMobilePhonePadding),
-      decoration: BoxDecoration(
-        color: context.colors.white,
-        border: context.isDarkMode
-            ? null
-            : Border(
-                top: BorderSide(color: context.colors.primaryBackgroundColor!),
-              ),
-        boxShadow: [
-          BoxShadow(
-              color: context.colors.primaryBackgroundColor!,
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: const Offset(0, -1))
-        ],
-      ),
+      decoration: hasDecoration
+          ? BoxDecoration(
+              color: context.colors.white,
+              border: context.isDarkMode
+                  ? null
+                  : Border(
+                      top: BorderSide(
+                          color: context.colors.primaryBackgroundColor!),
+                    ),
+              boxShadow: [
+                BoxShadow(
+                    color: context.colors.primaryBackgroundColor!,
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: const Offset(0, -1))
+              ],
+            )
+          : null,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

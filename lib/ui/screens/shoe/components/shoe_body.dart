@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoesly/core/app/constants/app_colors.dart';
 import 'package:shoesly/core/app/constants/app_dimensions.dart';
@@ -246,13 +245,67 @@ class _ShoeBodyState extends State<ShoeBody> {
                   ),
                 ),
                 CustomAddWidget(
-                  trailTitle: AppTexts.addToCart,
+                  trailTitle: AppTexts.addToCart.toUpperCase(),
                   hasBtn: false,
                   leadTitle: "${model?.price ?? 0}",
                   trailOnTap: () {
                     customBottomSheetWidget(
-                      context: context,
-                    );
+                        context: context,
+                        sheetTitle: AppTexts.addToCart,
+                        isScrollControlled: false,
+                        widgetBody: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            kVSizedBox3,
+                            const CustomAppText(
+                              text: AppTexts.quantity,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            kVSizedBox2,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomAppText(
+                                  text: "${state.quantity}",
+                                ),
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => context
+                                          .read<ShoeBloc>()
+                                          .add(const ShoeStepperDecrement()),
+                                      child: CustomSvgWidget(
+                                        icon: kMinusCircleIcon,
+                                        color: state.quantity == 1
+                                            ? context.colors.tertiary
+                                            : null,
+                                      ),
+                                    ),
+                                    kHSizedBox1,
+                                    GestureDetector(
+                                      onTap: () => context
+                                          .read<ShoeBloc>()
+                                          .add(const ShoeStepperIncrement()),
+                                      child: CustomSvgWidget(
+                                        icon: kAddCircleIcon,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            kVSizedBox1,
+                            const Divider(),
+                            kVSizedBox1,
+                            CustomAddWidget(
+                              hasBtn: false,
+                              leadTitle: "${model?.price ?? 0}",
+                              trailTitle: AppTexts.addToCart,
+                              hasDecoration: false,
+                            ),
+                            kVSizedBox2,
+                          ],
+                        ));
                   },
                 ),
               ],

@@ -22,10 +22,11 @@ class AppTexts {
   static const color = "Color";
 
   // Shoe screen
-  static const addToCart = "ADD TO CART";
+  static const addToCart = "Add to cart";
   static const price = "Price";
   static const size = "Size";
   static const description = "Description";
   static const review = "Review";
+  static const quantity = "Quantity";
   static const seeAllReview = "SEE ALL REVIEW";
 }

@@ -8,7 +8,7 @@ class ShoeState extends Equatable {
   final List<ShoeModel>? shoeModelList;
   final ShoeModel? shoeModel;
   final String? shoeSize, shoeColor;
-  final int imageIndex;
+  final int imageIndex, quantity;
 
   const ShoeState({
     this.fetchShoeStatus = AppStatus.initial,
@@ -20,6 +20,7 @@ class ShoeState extends Equatable {
     this.shoeSize,
     this.shoeColor,
     this.imageIndex = 0,
+    this.quantity = 1,
   });
 
   @override
@@ -32,7 +33,8 @@ class ShoeState extends Equatable {
         shoeColor,
         sizeSelectStatus,
         colorSelectStatus,
-        imageIndex
+        imageIndex,
+        quantity
       ];
 
   ShoeState copyWith({
@@ -45,6 +47,7 @@ class ShoeState extends Equatable {
     String? shoeSize,
     String? shoeColor,
     int? imageIndex,
+    int? quantity,
   }) =>
       ShoeState(
         fetchShoeStatus: fetchShoeStatus ?? this.fetchShoeStatus,
@@ -54,6 +57,7 @@ class ShoeState extends Equatable {
         shoeSize: shoeSize ?? this.shoeSize,
         shoeModelList: shoeModelList ?? this.shoeModelList,
         imageIndex: imageIndex ?? this.imageIndex,
+        quantity: quantity ?? this.quantity,
         fetchShoeDetailsStatus:
             fetchShoeDetailsStatus ?? this.fetchShoeDetailsStatus,
         shoeModel: shoeModel ?? this.shoeModel,

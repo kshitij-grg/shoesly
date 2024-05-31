@@ -50,7 +50,7 @@ class CustomReviewTileWidget extends StatelessWidget {
               CustomAppText(
                 text: reviewModel?.description ?? '',
                 style: context.textTheme.bodySmall,
-                maxLines: 2,
+                maxLines: 5,
                 textAlign: TextAlign.left,
               ),
             ],
