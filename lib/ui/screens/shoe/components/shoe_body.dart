@@ -10,19 +10,21 @@ import 'package:shoesly/core/routes/route_navigator.dart';
 import 'package:shoesly/core/utils/responsive.dart';
 import 'package:shoesly/core/utils/theme_extensions.dart';
 import 'package:shoesly/di_injection/get_di_init.dart';
-import 'package:shoesly/ui/screens/shoe/components/review/review_body.dart';
+import 'package:shoesly/ui/screens/shoe/components/review/components/review_body.dart';
 import 'package:shoesly/ui/widgets/custom_add_widget.dart';
 import 'package:shoesly/ui/widgets/custom_border_text_widget.dart';
+import 'package:shoesly/ui/widgets/custom_bottomsheet_widget.dart';
 import 'package:shoesly/ui/widgets/custom_circle_widget.dart';
 import 'package:shoesly/ui/widgets/custom_network_widget.dart';
 import 'package:shoesly/ui/widgets/custom_svg_widget.dart';
 
+import '../../../../bloc/review/review_bloc.dart';
 import '../../../../bloc/shoe/shoe_bloc.dart';
 import '../../../../core/enums/enum.dart';
-import '../../../../core/utils/date_formatter.dart';
 import '../../../widgets/custom_circular_widget.dart';
 import '../../../widgets/custom_data_not_found_wigdet.dart';
 import '../../../widgets/custom_rating_widget.dart';
+import 'review/components/widgets/custom_review_tile_widget.dart';
 
 class ShoeBody extends StatefulWidget {
   final String shoeId;
@@ -215,51 +217,8 @@ class _ShoeBodyState extends State<ShoeBody> {
                           ListView.separated(
                             itemBuilder: (context, index) {
                               var reviewModel = model?.reviews?[index];
-                              return Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomNetworkImageWidget(
-                                    imageUrl: reviewModel?.image,
-                                  ),
-                                  kHSizedBox2,
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            CustomAppText(
-                                              text: reviewModel?.username ?? '',
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            CustomAppText(
-                                              text: DateFormatter.timeAgo(
-                                                  reviewModel?.createAt),
-                                              style: context
-                                                  .textTheme.bodySmall!
-                                                  .copyWith(
-                                                      color: context
-                                                          .colors.tertiary),
-                                            ),
-                                          ],
-                                        ),
-                                        kVSizedBox0,
-                                        CustomRatingWidget(model: model),
-                                        kVSizedBox0,
-                                        CustomAppText(
-                                          text: reviewModel?.description ?? '',
-                                          style: context.textTheme.bodySmall,
-                                          maxLines: 2,
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              );
+                              return CustomReviewTileWidget(
+                                  reviewModel: reviewModel, model: model);
                             },
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -270,8 +229,13 @@ class _ShoeBodyState extends State<ShoeBody> {
                           ),
                           kVSizedBox3,
                           GestureDetector(
-                            onTap: () => RouteNavigator.navigate(
-                                context, const ReviewBody()),
+                            onTap: () {
+                              context.read<ReviewBloc>().add(
+                                  ReviewDataFetched(reviews: model?.reviews));
+
+                              RouteNavigator.navigate(
+                                  context, const ReviewBody());
+                            },
                             child: const CustomBorderTextWidget(
                               title: AppTexts.seeAllReview,
                             ),
@@ -285,6 +249,11 @@ class _ShoeBodyState extends State<ShoeBody> {
                   trailTitle: AppTexts.addToCart,
                   hasBtn: false,
                   leadTitle: "${model?.price ?? 0}",
+                  trailOnTap: () {
+                    customBottomSheetWidget(
+                      context: context,
+                    );
+                  },
                 ),
               ],
             ),
