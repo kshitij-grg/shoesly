@@ -1,5 +1,15 @@
 part of 'filter_bloc.dart';
 
+class FilterBrandSelected extends FilterEvent {
+  final String? brand;
+  const FilterBrandSelected({this.brand});
+}
+
+class FilterColorSelected extends FilterEvent {
+  final String? color;
+  const FilterColorSelected({this.color});
+}
+
 class FilterEvent extends Equatable {
   const FilterEvent();
 
@@ -7,7 +17,12 @@ class FilterEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FilterValueSelected extends FilterEvent {
-  final FilterModel? filterModel;
-  const FilterValueSelected({this.filterModel});
+class FilterGenderSelected extends FilterEvent {
+  final String? gender;
+  const FilterGenderSelected({this.gender});
+}
+
+class FilterPriceRangeChanged extends FilterEvent {
+  final double? minPrice, maxPrice;
+  const FilterPriceRangeChanged({this.minPrice, this.maxPrice});
 }

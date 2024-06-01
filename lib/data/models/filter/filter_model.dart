@@ -1,6 +1,6 @@
 class FilterModel {
   final String? brand, sortBy, color, gender;
-  final int? minPrice, maxPrice;
+  final double? minPrice, maxPrice;
 
   FilterModel({
     this.brand,
@@ -16,8 +16,8 @@ class FilterModel {
     String? sortBy,
     String? color,
     String? gender,
-    int? minPrice,
-    int? maxPrice,
+    double? minPrice,
+    double? maxPrice,
   }) =>
       FilterModel(
         brand: brand ?? this.brand,

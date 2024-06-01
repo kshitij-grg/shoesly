@@ -39,6 +39,11 @@ class ShoeApiClient {
     return ref
         .where("brandInfo.brandName", isEqualTo: filterModel?.brand)
         .where("colors", arrayContains: filterModel?.color)
-        .where("gender", isEqualTo: filterModel?.gender);
+        .where("gender", isEqualTo: filterModel?.gender)
+        .orderBy("createAt", descending: true) //for recent shoes
+        .orderBy("price") //for lowest price
+        .orderBy("price", descending: true) //for highest price
+        .where("price", isGreaterThanOrEqualTo: filterModel?.minPrice)
+        .where("price", isLessThanOrEqualTo: filterModel?.maxPrice);
   }
 }

@@ -22,6 +22,7 @@ class FilterBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var filterBloc = context.read<FilterBloc>();
     return Column(
       children: [
         Expanded(
@@ -48,13 +49,10 @@ class FilterBody extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 var model = brandState.brandModelList?[index];
                                 bool isSelected =
-                                    filterState.filterModel?.brand ==
-                                        model?.name;
+                                    filterState.brand == model?.name;
                                 return GestureDetector(
-                                  onTap: () => context.read<FilterBloc>().add(
-                                      FilterValueSelected(
-                                          filterModel: filterState.filterModel
-                                              ?.copyWith(brand: model?.name))),
+                                  onTap: () => filterBloc.add(
+                                      FilterBrandSelected(brand: model?.name)),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -101,7 +99,12 @@ class FilterBody extends StatelessWidget {
                         style: context.textTheme.headlineMedium,
                       ),
                       kVSizedBox2,
-                      const CustomRangeSliderWidget(),
+                      CustomRangeSliderWidget(
+                        onChange: (priceRange) => filterBloc.add(
+                            FilterPriceRangeChanged(
+                                minPrice: priceRange.start,
+                                maxPrice: priceRange.end)),
+                      ),
                       kVSizedBox2,
                       CustomAppText(
                         text: AppTexts.sortBy,
@@ -123,9 +126,8 @@ class FilterBody extends StatelessWidget {
                               // onTap: () => context
                               //     .read<BrandBloc>()
                               //     .add(BrandSelected(selectedBrand: model?.name)),
-                              child: CustomContainerTextWidget(
-                                text: model.value,
-                              ),
+                              child:
+                                  CustomContainerTextWidget(text: model.value),
                             );
                           },
                         ),
@@ -146,13 +148,13 @@ class FilterBody extends StatelessWidget {
                           separatorBuilder: (context, index) => kHSizedBox1,
                           itemBuilder: (context, index) {
                             var model = filterRepository.genderList[index];
-                            // bool isSelected = state.selectedBrand == model?.name;
+                            bool isSelected = filterState.gender == model;
                             return GestureDetector(
-                              // onTap: () => context
-                              //     .read<BrandBloc>()
-                              //     .add(BrandSelected(selectedBrand: model?.name)),
+                              onTap: () => filterBloc
+                                  .add(FilterGenderSelected(gender: model)),
                               child: CustomContainerTextWidget(
                                 text: model,
+                                hasBackgroundColor: isSelected,
                               ),
                             );
                           },
@@ -174,15 +176,16 @@ class FilterBody extends StatelessWidget {
                           separatorBuilder: (context, index) => kHSizedBox1,
                           itemBuilder: (context, index) {
                             var model = filterRepository.colorList[index];
-                            // bool isSelected = state.selectedBrand == model?.name;
+                            bool isSelected = filterState.color == model;
                             return GestureDetector(
-                              // onTap: () => context
-                              //     .read<BrandBloc>()
-                              //     .add(BrandSelected(selectedBrand: model?.name)),
+                              onTap: () => filterBloc
+                                  .add(FilterColorSelected(color: model)),
                               child: CustomContainerTextWidget(
                                 text: model,
                                 hasLeadWidget: true,
                                 hasBackgroundColor: false,
+                                borderColor:
+                                    isSelected ? context.colors.primary : null,
                               ),
                             );
                           },
