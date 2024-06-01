@@ -9,7 +9,7 @@ class DiscoverRepository {
   initDiscoverScreen({required BuildContext context}) {
     var brandBloc = context.read<BrandBloc>();
 
-    brandBloc.add(const BrandFetched(hasAllKeyword: true));
+    brandBloc.add(BrandFetched());
     brandBloc.add(const BrandSelected(selectedBrand: AppTexts.all));
 
     context.read<ShoeBloc>().add(const ShoeFetched(hasFilter: false));

@@ -5,6 +5,7 @@ import 'package:shoesly/core/app/constants/app_dimensions.dart';
 import 'package:shoesly/core/app/constants/app_icons.dart';
 import 'package:shoesly/core/app/constants/app_styles.dart';
 import 'package:shoesly/core/app/constants/app_texts.dart';
+import 'package:shoesly/core/routes/route_config.dart';
 import 'package:shoesly/core/routes/route_navigator.dart';
 import 'package:shoesly/core/utils/responsive.dart';
 import 'package:shoesly/core/utils/theme_extensions.dart';
@@ -17,13 +18,17 @@ import 'package:shoesly/ui/widgets/custom_circle_widget.dart';
 import 'package:shoesly/ui/widgets/custom_network_widget.dart';
 import 'package:shoesly/ui/widgets/custom_svg_widget.dart';
 
+import '../../../../bloc/cart/cart_bloc.dart';
 import '../../../../bloc/review/review_bloc.dart';
 import '../../../../bloc/shoe/shoe_bloc.dart';
 import '../../../../core/enums/enum.dart';
+import '../../../../core/functions/get_color_value.dart';
 import '../../../widgets/custom_circular_widget.dart';
 import '../../../widgets/custom_data_not_found_wigdet.dart';
 import '../../../widgets/custom_rating_widget.dart';
 import 'review/components/widgets/custom_review_tile_widget.dart';
+import 'widgets/custom_add_shoe_to_cart_widget.dart';
+import 'widgets/custom_shoe_added_widget.dart';
 
 class ShoeBody extends StatefulWidget {
   final String shoeId;
@@ -126,7 +131,8 @@ class _ShoeBodyState extends State<ShoeBody> {
                                                   color: colorModel)),
                                           child: CustomCircleWidget(
                                             width: 20,
-                                            backgroundColor: getImageColor(
+                                            backgroundColor: getColorValue(
+                                                context: context,
                                                 color: colorModel),
                                             padding: const EdgeInsets.all(5),
                                             child: isSelected
@@ -249,62 +255,55 @@ class _ShoeBodyState extends State<ShoeBody> {
                   hasBtn: false,
                   leadTitle: "${model?.price ?? 0}",
                   trailOnTap: () {
+                    context.read<ShoeBloc>().add(const ShoeCounterReset());
+                    context.read<CartBloc>().add(const CartModelAdded());
+
                     customBottomSheetWidget(
                         context: context,
                         sheetTitle: AppTexts.addToCart,
                         isScrollControlled: false,
-                        widgetBody: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            kVSizedBox3,
-                            const CustomAppText(
-                              text: AppTexts.quantity,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            kVSizedBox2,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        showTopBar: false,
+                        widgetBody: BlocConsumer<CartBloc, CartState>(
+                          listener: (context, cartState) {
+                            if (cartState.cartAddStatus == AppStatus.success) {
+                              context
+                                  .read<CartBloc>()
+                                  .add(const CartModelAdded(isShoeAdded: true));
+                            }
+                          },
+                          builder: (context, cartState) {
+                            return Column(
                               children: [
-                                CustomAppText(
-                                  text: "${state.quantity}",
+                                cartState.isShoeAdded
+                                    ? const CustomShoeAddedWidget()
+                                    : const CustomAddShoeToCartWidget(),
+                                CustomAddWidget(
+                                  hasBtn: cartState.isShoeAdded,
+                                  leadTitle: cartState.isShoeAdded
+                                      ? AppTexts.backExplore
+                                      : "${model?.price ?? 0}",
+                                  leadOnTap: () {
+                                    RouteNavigator.back(context);
+                                    RouteNavigator.back(context);
+                                  },
+                                  trailTitle: cartState.isShoeAdded
+                                      ? AppTexts.toCart
+                                      : AppTexts.addToCart,
+                                  hasDecoration: false,
+                                  trailOnTap: cartState.isShoeAdded
+                                      ? () {
+                                          RouteNavigator.back(context);
+                                          RouteNavigator.replaceAndPushNamed(
+                                              context, RouteConfig.cartRoute);
+                                        }
+                                      : () => context
+                                          .read<ShoeBloc>()
+                                          .addShoeToCartList(context: context),
                                 ),
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () => context
-                                          .read<ShoeBloc>()
-                                          .add(const ShoeStepperDecrement()),
-                                      child: CustomSvgWidget(
-                                        icon: kMinusCircleIcon,
-                                        color: state.quantity == 1
-                                            ? context.colors.tertiary
-                                            : null,
-                                      ),
-                                    ),
-                                    kHSizedBox1,
-                                    GestureDetector(
-                                      onTap: () => context
-                                          .read<ShoeBloc>()
-                                          .add(const ShoeStepperIncrement()),
-                                      child: CustomSvgWidget(
-                                        icon: kAddCircleIcon,
-                                      ),
-                                    ),
-                                  ],
-                                )
+                                kVSizedBox2,
                               ],
-                            ),
-                            kVSizedBox1,
-                            const Divider(),
-                            kVSizedBox1,
-                            CustomAddWidget(
-                              hasBtn: false,
-                              leadTitle: "${model?.price ?? 0}",
-                              trailTitle: AppTexts.addToCart,
-                              hasDecoration: false,
-                            ),
-                            kVSizedBox2,
-                          ],
+                            );
+                          },
                         ));
                   },
                 ),
@@ -313,14 +312,6 @@ class _ShoeBodyState extends State<ShoeBody> {
         };
       },
     );
-  }
-
-  Color? getImageColor({String? color}) {
-    return switch (color) {
-      "Red" => context.colors.error,
-      "Blue" => context.colors.information,
-      _ => context.colors.primary,
-    };
   }
 
   @override

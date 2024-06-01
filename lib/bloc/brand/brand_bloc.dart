@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoesly/core/enums/enum.dart';
 import 'package:shoesly/di_injection/get_di_init.dart';
 
+import '../../core/app/constants/app_texts.dart';
 import '../../data/models/brand/brand_model.dart';
 
 part 'brand_event.dart';
@@ -19,12 +20,22 @@ class BrandBloc extends Bloc<BrandEvent, BrandState> {
   _onBrandFetch(BrandFetched event, Emitter<BrandState> emit) async {
     try {
       emit(state.copyWith(fetchBrandStatus: AppStatus.loading));
-      var response =
-          await brandRepository.fetchBrands(hasAllKeyword: event.hasAllKeyword);
+
+      var response = await brandRepository.fetchBrands();
+
+      // for the brand list with All keyword
+      List<BrandModel> tempResponse = List.from(
+          response); //making temp list so that the main response doesnot get altered
+      List<BrandModel> responseWithAll = [
+        BrandModel(name: AppTexts.all),
+        ...tempResponse,
+      ];
 
       if (response.isNotEmpty) {
         emit(state.copyWith(
-            brandModelList: response, fetchBrandStatus: AppStatus.success));
+            brandModelList: response,
+            brandModelListWithAll: responseWithAll,
+            fetchBrandStatus: AppStatus.success));
         return emit(state.copyWith(fetchBrandStatus: AppStatus.complete));
       }
       emit(state.copyWith(fetchBrandStatus: AppStatus.error));

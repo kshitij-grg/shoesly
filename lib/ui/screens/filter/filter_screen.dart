@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shoesly/core/utils/responsive.dart';
 import 'package:shoesly/ui/screens/filter/components/filter_body.dart';
 
 import '../../widgets/custom_appbar_widget.dart';
@@ -14,10 +13,7 @@ class FilterScreen extends StatelessWidget {
         context: context,
         title: "Filter",
       ),
-      body: Responsive(
-        context: context,
-        child: const FilterBody(),
-      ),
+      body: const FilterBody(),
     );
   }
 }

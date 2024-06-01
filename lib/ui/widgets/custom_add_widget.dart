@@ -10,10 +10,9 @@ import 'custom_border_text_widget.dart';
 import 'custom_button_widget.dart';
 
 class CustomAddWidget extends StatelessWidget {
-  final String? leadTitle, trailTitle;
+  final String? leadTitle, leadSubtitle, trailTitle;
   final Function()? leadOnTap, trailOnTap;
-  final bool canUpdateCreate, hasBtn, hasDecoration;
-  final Color? trailBackGroundColor;
+  final bool hasBtn, hasDecoration;
 
   const CustomAddWidget({
     super.key,
@@ -21,10 +20,9 @@ class CustomAddWidget extends StatelessWidget {
     this.trailTitle,
     this.leadOnTap,
     this.trailOnTap,
+    this.leadSubtitle,
     this.hasBtn = true,
     this.hasDecoration = true,
-    this.trailBackGroundColor,
-    this.canUpdateCreate = true,
   });
 
   @override
@@ -54,14 +52,16 @@ class CustomAddWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            flex: hasBtn ? 2 : 1,
+            flex: hasBtn ? 4 : 1,
             child: hasBtn
-                ? const CustomBorderTextWidget()
+                ? GestureDetector(
+                    onTap: leadOnTap,
+                    child: CustomBorderTextWidget(title: leadTitle))
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomAppText(
-                        text: AppTexts.price,
+                        text: leadSubtitle ?? AppTexts.price,
                         style: context.textTheme.bodySmall!
                             .copyWith(color: context.colors.tertiary),
                       ),

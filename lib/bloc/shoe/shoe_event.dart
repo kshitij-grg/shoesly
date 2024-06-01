@@ -5,6 +5,16 @@ class ShoeColorSelected extends ShoeEvent {
   const ShoeColorSelected({this.color});
 }
 
+class ShoeCounterDecreased extends ShoeEvent {}
+
+class ShoeCounterIncreased extends ShoeEvent {}
+
+class ShoeCounterReset extends ShoeEvent {
+  final int index;
+
+  const ShoeCounterReset({this.index = 1});
+}
+
 class ShoeDetailsFetched extends ShoeEvent {
   final String shoeId;
 
@@ -37,14 +47,4 @@ class ShoeImageSwitched extends ShoeEvent {
 class ShoeSizeSelected extends ShoeEvent {
   final String? size;
   const ShoeSizeSelected({this.size});
-}
-
-class ShoeStepperDecrement extends ShoeEvent {
-  final int? index;
-  const ShoeStepperDecrement({this.index});
-}
-
-class ShoeStepperIncrement extends ShoeEvent {
-  final int? index;
-  const ShoeStepperIncrement({this.index});
 }

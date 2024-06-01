@@ -116,6 +116,7 @@ class AppThemeConfig {
           warning: AppColors.kWARNING,
           error: AppColors.kERROR,
           information: AppColors.kINFORMATION,
+          sucess: AppColors.kSUCCESS,
         ),
       ];
 }

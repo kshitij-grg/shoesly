@@ -5,6 +5,7 @@ import 'package:shoesly/data/data_providers/brand/brand_api_client.dart';
 import '../data/data_providers/shoe/shoe_api_client.dart';
 import '../data/repositories/brand/brand_repository.dart';
 import '../data/repositories/discover/discover_repository.dart';
+import '../data/repositories/filter/filter_repository.dart';
 import '../data/repositories/review/review_repository.dart';
 import '../data/repositories/shoe/shoe_repository.dart';
 import '../data/repositories/splash/splash_repository.dart';
@@ -18,6 +19,7 @@ void initDependencies() {
   di.registerLazySingleton(() => DiscoverRepository());
   di.registerLazySingleton(() => ShoeRepository());
   di.registerLazySingleton(() => ReviewRepository());
+  di.registerLazySingleton(() => FilterRepository());
 
   // API clients
   di.registerLazySingleton(() => BrandApiClient());

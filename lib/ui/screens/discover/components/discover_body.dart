@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoesly/core/app/constants/app_dimensions.dart';
 import 'package:shoesly/core/app/constants/app_fonts_size.dart';
@@ -18,6 +19,7 @@ import 'package:shoesly/ui/widgets/custom_network_widget.dart';
 import 'package:shoesly/ui/widgets/custom_svg_widget.dart';
 
 import '../../../../bloc/brand/brand_bloc.dart';
+import '../../../../bloc/cart/cart_bloc.dart';
 import '../../../../bloc/shoe/shoe_bloc.dart';
 import '../../../../core/enums/enum.dart';
 import '../../../widgets/custom_rating_widget.dart';
@@ -45,21 +47,30 @@ class _DiscoverBodyState extends State<DiscoverBody> {
                 style: context.textTheme.headlineLarge!.copyWith(
                     fontSize: AppFontsSize.kS30, fontWeight: FontWeight.bold),
               ),
-              Stack(
-                alignment: Alignment.centerRight,
-                children: [
-                  CustomSvgWidget(
-                    icon: kCartIcon,
-                  ),
-                  Positioned(
-                    top: 5,
-                    child: CustomCircleWidget(
-                      backgroundColor: context.colors.error,
-                      height: 8,
-                      width: 8,
-                    ),
-                  ),
-                ],
+              GestureDetector(
+                onTap: () => RouteNavigator.navigateNamed(
+                    context, RouteConfig.cartRoute),
+                child: BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    return Stack(
+                      alignment: Alignment.centerRight,
+                      children: [
+                        CustomSvgWidget(
+                          icon: kCartIcon,
+                        ),
+                        if (state.cartModelList?.isNotEmpty == true)
+                          Positioned(
+                            top: 5,
+                            child: CustomCircleWidget(
+                              backgroundColor: context.colors.error,
+                              height: 8,
+                              width: 8,
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -78,13 +89,13 @@ class _DiscoverBodyState extends State<DiscoverBody> {
               return SizedBox(
                 height: 40,
                 child: ListView.separated(
-                  itemCount: state.brandModelList?.length ?? 0,
+                  itemCount: state.brandModelListWithAll?.length ?? 0,
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   separatorBuilder: (context, index) => kHSizedBox2,
                   itemBuilder: (context, index) {
-                    var model = state.brandModelList?[index];
+                    var model = state.brandModelListWithAll?[index];
                     bool isSelected = state.selectedBrand == model?.name;
                     return GestureDetector(
                       onTap: () => context

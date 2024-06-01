@@ -7,18 +7,14 @@ import '../../core/routes/route_navigator.dart';
 import '../../core/utils/responsive.dart';
 import '../../core/utils/theme_extensions.dart';
 
-customBottomSheetWidget(
-    {String? sheetTitle,
-    Widget? widgetBody,
-    required BuildContext context,
-    bool enableSecondaryHeader = false,
-    bool isScrollControlled = true,
-    bool? onlyRightWidget,
-    Color? titleColor,
-    bool? showTopBar = true,
-    Function()? onPressedCancel,
-    Function()? onPressedDone,
-    bool showTop = true}) async {
+customBottomSheetWidget({
+  String? sheetTitle,
+  Widget? widgetBody,
+  required BuildContext context,
+  bool isScrollControlled = true,
+  bool? showTopBar = true,
+  Function()? onPressedDone,
+}) async {
   var titleMediumStyle = context.textTheme.headlineLarge;
   await showModalBottomSheet(
       enableDrag: true,
@@ -33,7 +29,7 @@ customBottomSheetWidget(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (showTopBar == true)
+              if (showTopBar == true) ...[
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Container(
@@ -41,39 +37,40 @@ customBottomSheetWidget(
                     height: 3.5,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey.shade400,
+                      color: context.colors.tertiary,
                     ),
                   ),
                 ),
-              Container(
-                margin: const EdgeInsets.only(
-                    left: Responsive.kHMobilePhonePadding,
-                    right: Responsive.kHMobilePhonePadding,
-                    top: 14,
-                    bottom: 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: CustomAppText(
-                        text: sheetTitle ?? "",
-                        style: titleMediumStyle,
-                        textAlign: TextAlign.center,
+                Container(
+                  margin: const EdgeInsets.only(
+                      left: Responsive.kHMobilePhonePadding,
+                      right: Responsive.kHMobilePhonePadding,
+                      top: 14,
+                      bottom: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: CustomAppText(
+                          text: sheetTitle ?? "",
+                          style: titleMediumStyle,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: onPressedDone ??
-                          () {
-                            RouteNavigator.back(ctx);
-                            onPressedDone;
-                          },
-                      child: CustomSvgWidget(
-                        icon: kCloseIcon,
+                      GestureDetector(
+                        onTap: onPressedDone ??
+                            () {
+                              RouteNavigator.back(ctx);
+                              onPressedDone;
+                            },
+                        child: CustomSvgWidget(
+                          icon: kCloseIcon,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+              ],
               Expanded(
                 flex: isScrollControlled ? 1 : 0,
                 child: Container(

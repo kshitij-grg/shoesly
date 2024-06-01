@@ -52,4 +52,9 @@ class RouteNavigator {
       ),
     );
   }
+
+  static replaceAndPushNamed(BuildContext context, String routeName,
+      {dynamic arguments}) {
+    Navigator.pushReplacementNamed(context, routeName, arguments: arguments);
+  }
 }

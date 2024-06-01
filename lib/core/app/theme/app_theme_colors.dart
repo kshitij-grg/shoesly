@@ -10,6 +10,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       warning,
       secondaryBackgroundColor,
       information,
+      sucess,
       error;
 
   const AppThemeColors({
@@ -20,6 +21,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     required this.primaryBackgroundColor,
     required this.warning,
     required this.error,
+    required this.sucess,
     required this.secondaryBackgroundColor,
     required this.information,
   });
@@ -32,6 +34,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     Color? white,
     Color? backgroundColor,
     Color? error,
+    Color? sucess,
     Color? warning,
     Color? information,
     Color? secondaryBackgroundColor,
@@ -41,6 +44,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       tertiary: tertiary ?? tertiary,
       white: white ?? this.white,
       error: error ?? this.error,
+      sucess: sucess ?? this.sucess,
       primaryBackgroundColor: backgroundColor ?? primaryBackgroundColor,
       secondary: secondary ?? this.secondary,
       warning: warning ?? this.warning,
@@ -59,6 +63,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       primary: Color.lerp(primary, other.primary, t),
       tertiary: Color.lerp(tertiary, other.tertiary, t),
       information: Color.lerp(information, other.information, t),
+      sucess: Color.lerp(sucess, other.sucess, t),
       error: Color.lerp(error, other.error, t),
       secondaryBackgroundColor: Color.lerp(
           secondaryBackgroundColor, other.secondaryBackgroundColor, t),

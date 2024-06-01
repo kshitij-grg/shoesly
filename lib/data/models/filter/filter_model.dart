@@ -10,4 +10,21 @@ class FilterModel {
     this.minPrice,
     this.maxPrice,
   });
+
+  FilterModel copyWith({
+    String? brand,
+    String? sortBy,
+    String? color,
+    String? gender,
+    int? minPrice,
+    int? maxPrice,
+  }) =>
+      FilterModel(
+        brand: brand ?? this.brand,
+        sortBy: sortBy ?? this.sortBy,
+        color: color ?? this.color,
+        gender: gender ?? this.gender,
+        minPrice: minPrice ?? this.minPrice,
+        maxPrice: maxPrice ?? this.maxPrice,
+      );
 }

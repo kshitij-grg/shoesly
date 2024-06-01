@@ -5,6 +5,7 @@ class AppFontsSize {
   static double kS12 = 12;
   static double kS14 = 14; //By default this font-size execute for normal text.
   static double kS16 = 16;
+  static double kS18 = 18;
   static double kS20 = 20;
   static double kS24 = 24;
   static double kS30 = 30;
