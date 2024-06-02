@@ -6,14 +6,6 @@ import '../../../core/handler/base_api_client.dart';
 
 class BrandApiClient {
   Future<List<BrandModel>> fetchBrands() async {
-    // final ref = firebaseService.firebaseInstance.collection("brands");
-
-    // QuerySnapshot querySnapshot = await ref.get();
-
-    // final response = querySnapshot.docs
-    //     .map((e) => BrandModel.fromJson(e.data() as Map<String, dynamic>))
-    //     .toList();
-
     QuerySnapshot querySnapshot =
         await BaseApiClient.fetch(collection: ApiConfigs.brandUrl);
 

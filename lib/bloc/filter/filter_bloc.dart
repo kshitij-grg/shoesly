@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shoesly/core/enums/enum.dart';
 import 'package:shoesly/data/models/app_static/app_static_model.dart';
 import 'package:shoesly/data/models/filter/filter_model.dart';
 
@@ -28,6 +27,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
           gender: state.gender,
           maxPrice: state.maxPrice,
           minPrice: state.minPrice,
+          sortBy: state.sortBy,
         )));
   }
 
@@ -49,7 +49,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
   }
 
   _onFilterSortBySelect(FilterSortBySelected event, Emitter<FilterState> emit) {
-    emit(state.copyWith());
+    emit(state.copyWith(sortBy: event.sortbyModel));
   }
 
   _onFilterValuesReset(FilterValuesReset event, Emitter<FilterState> emit) {

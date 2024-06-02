@@ -127,13 +127,15 @@ class FilterBody extends StatelessWidget {
                           separatorBuilder: (context, index) => kHSizedBox1,
                           itemBuilder: (context, index) {
                             var model = filterRepository.sortbyList[index];
-                            // bool isSelected = state.selectedBrand == model?.name;
+                            bool isSelected =
+                                filterState.sortBy?.value == model.value;
                             return GestureDetector(
-                              // onTap: () => context
-                              //     .read<BrandBloc>()
-                              //     .add(BrandSelected(selectedBrand: model?.name)),
-                              child:
-                                  CustomContainerTextWidget(text: model.value),
+                              onTap: () => filterBloc.add(
+                                  FilterSortBySelected(sortbyModel: model)),
+                              child: CustomContainerTextWidget(
+                                text: model.value,
+                                hasBackgroundColor: isSelected,
+                              ),
                             );
                           },
                         ),
@@ -205,19 +207,15 @@ class FilterBody extends StatelessWidget {
             ),
           ),
         ),
-        BlocBuilder<FilterBloc, FilterState>(
-          builder: (context, s) {
-            return BlocBuilder<ShoeBloc, ShoeState>(
-              builder: (context, state) {
-                return CustomAddWidget(
-                  trailTitle: AppTexts.apply,
-                  leadTitle: AppTexts.reset,
-                  leadOnTap: () => filterBloc.add(FilterValuesReset()),
-                  trailOnTap: () {
-                    RouteNavigator.back(context);
-                    filterBloc.saveFilterValues(context: context);
-                  },
-                );
+        BlocBuilder<ShoeBloc, ShoeState>(
+          builder: (context, state) {
+            return CustomAddWidget(
+              trailTitle: AppTexts.apply,
+              leadTitle: AppTexts.reset,
+              leadOnTap: () => filterBloc.add(FilterValuesReset()),
+              trailOnTap: () {
+                RouteNavigator.back(context);
+                filterBloc.saveFilterValues(context: context);
               },
             );
           },

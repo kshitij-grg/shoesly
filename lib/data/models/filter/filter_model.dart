@@ -1,5 +1,8 @@
+import 'package:shoesly/data/models/app_static/app_static_model.dart';
+
 class FilterModel {
-  final String? brand, sortBy, color, gender;
+  final String? brand, color, gender;
+  final AppStaticModel? sortBy;
   final double? minPrice, maxPrice;
 
   FilterModel({
@@ -13,7 +16,7 @@ class FilterModel {
 
   FilterModel copyWith({
     String? brand,
-    String? sortBy,
+    AppStaticModel? sortBy,
     String? color,
     String? gender,
     double? minPrice,

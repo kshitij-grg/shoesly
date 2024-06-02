@@ -4,7 +4,6 @@ class FilterState extends Equatable {
   final String? brand, gender, color;
   final double minPrice, maxPrice;
   final AppStaticModel? sortBy;
-  final AppStatus filterSelectStatus;
   const FilterState({
     this.brand,
     this.gender,
@@ -12,7 +11,6 @@ class FilterState extends Equatable {
     this.sortBy,
     this.maxPrice = 0,
     this.minPrice = 0,
-    this.filterSelectStatus = AppStatus.initial,
   });
 
   @override
@@ -25,7 +23,6 @@ class FilterState extends Equatable {
     double? minPrice,
     double? maxPrice,
     AppStaticModel? sortBy,
-    AppStatus? filterSelectStatus,
   }) =>
       FilterState(
         brand: brand ?? this.brand,
@@ -34,6 +31,5 @@ class FilterState extends Equatable {
         color: color ?? this.color,
         minPrice: minPrice ?? this.minPrice,
         maxPrice: maxPrice ?? this.maxPrice,
-        filterSelectStatus: filterSelectStatus ?? this.filterSelectStatus,
       );
 }

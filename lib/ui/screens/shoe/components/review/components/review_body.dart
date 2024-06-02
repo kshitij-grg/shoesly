@@ -8,8 +8,11 @@ import 'package:shoesly/ui/widgets/custom_appbar_widget.dart';
 
 import '../../../../../../bloc/review/review_bloc.dart';
 import '../../../../../../core/app/constants/app_dimensions.dart';
+import '../../../../../../core/app/constants/app_icons.dart';
 import '../../../../../../core/app/constants/app_styles.dart';
 import '../../../../../../core/enums/enum.dart';
+import '../../../../../../core/functions/get_average_rating_value.dart';
+import '../../../../../widgets/custom_svg_widget.dart';
 import 'widgets/custom_review_tile_widget.dart';
 
 class ReviewBody extends StatefulWidget {
@@ -31,9 +34,25 @@ class _ReviewBodyState extends State<ReviewBody> {
       builder: (context, state) {
         return Scaffold(
           appBar: CustomAppbarWidget.customAppBar(
-            context: context,
-            title: "${AppTexts.review} (${state.reviews?.length})",
-          ),
+              context: context,
+              title: "${AppTexts.review} (${state.reviews?.length})",
+              trailing: Row(
+                children: [
+                  CustomSvgWidget(
+                    icon: kStarIcon,
+                    height: 18,
+                    width: 18,
+                    color: context.colors.warning,
+                  ),
+                  kHSizedBox0,
+                  CustomAppText(
+                    text:
+                        "${getAverageRatingValue(reviewModel: state.reviews)}",
+                    color: context.colors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ],
+              )),
           body: Responsive(
             context: context,
             child: Column(

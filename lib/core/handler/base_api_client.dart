@@ -41,8 +41,8 @@ class BaseApiClient {
 
   static Query<Map<String, dynamic>> filteredShoes(
       FilterModel? filterModel, CollectionReference<Map<String, dynamic>> ref) {
-    if (filterModel?.sortBy?.isNotEmpty == true) {
-      return switch (filterModel?.sortBy) {
+    if (filterModel?.sortBy != null) {
+      return switch (filterModel?.sortBy?.id) {
         "recent" =>
           ref.orderBy("createdAt", descending: true), //for recent shoes
         "lowest" => ref.orderBy("price"), //for lowest price

@@ -7,12 +7,6 @@ import '../../../core/handler/base_api_client.dart';
 
 class ShoeApiClient {
   Future<ShoeModel> fetchShoeDetails({required String shoeId}) async {
-    // final ref =
-    //     firebaseService.firebaseInstance.collection("shoes").doc(shoeId);
-
-    // DocumentSnapshot documentSnapshot = await ref.get();
-    // final response =
-
     DocumentSnapshot documentSnapshot = await BaseApiClient.fetch(
         collection: ApiConfigs.shoeUrl, docId: shoeId);
 
@@ -24,19 +18,6 @@ class ShoeApiClient {
 
   Future<List<ShoeModel>> fetchShoes(
       {FilterModel? filterModel, bool hasFilter = true}) async {
-    // final ref = firebaseService.firebaseInstance.collection("shoes");
-
-    // Query<Map<String, dynamic>> filteredData =
-    //     hasFilter ? filteredShoes(filterModel, ref) : ref;
-
-    // QuerySnapshot querySnapshot = await filteredData.get();
-
-    // final response = querySnapshot.docs.map((e) {
-    //   var shoeDetailsData = e.data() as Map<String, dynamic>;
-    //   shoeDetailsData["id"] = e.id;
-    //   return ShoeModel.fromJson(shoeDetailsData);
-    // }).toList();
-
     QuerySnapshot querySnapshot = await BaseApiClient.fetch(
       collection: ApiConfigs.shoeUrl,
       queryData: filterModel,
@@ -50,22 +31,4 @@ class ShoeApiClient {
 
     return response;
   }
-
-  // Query<Map<String, dynamic>> filteredShoes(
-  //     FilterModel? filterModel, CollectionReference<Map<String, dynamic>> ref) {
-  //   if (filterModel?.sortBy?.isNotEmpty == true) {
-  //     return switch (filterModel?.sortBy) {
-  //       "recent" =>
-  //         ref.orderBy("createdAt", descending: true), //for recent shoes
-  //       "lowest" => ref.orderBy("price"), //for lowest price
-  //       _ => ref.orderBy("price", descending: true), //for highest price
-  //     };
-  //   }
-  //   return ref
-  //       .where("brandInfo.brandName", isEqualTo: filterModel?.brand)
-  //       .where("colors", arrayContains: filterModel?.color)
-  //       .where("gender", isEqualTo: filterModel?.gender)
-  //       .where("price", isGreaterThanOrEqualTo: filterModel?.minPrice)
-  //       .where("price", isLessThanOrEqualTo: filterModel?.maxPrice);
-  // }
 }
