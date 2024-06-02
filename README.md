@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document provides an overview of the development process, assumptions, challenges, and additional features implemented for the Priority Soft's Flutter Developer Test Project. The project aims to build a mobile application for both Android and iOS platforms using Flutter, following the provided Figma design. The application integrates with Firebase for data storage, analytics, and computing average review scores, with optional use of Supabase for additional database needs.
+This document provides an overview of the development process, assumptions, challenges, and additional features implemented for the Priority Soft's Flutter Developer Test Project. The project aims to build a mobile application for both Android and iOS platforms using Flutter, following the provided Figma design. The application integrates with Firebase for data storage.
 
 ## Project Setup Instructions
 
