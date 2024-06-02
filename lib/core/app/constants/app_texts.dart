@@ -9,6 +9,9 @@ class AppTexts {
   static const darkTheme = "dark";
   static const systemTheme = "system";
 
+  // API exceptions
+  static const somethingWentWrong = "Something went wrong, Try again";
+
   // Discover screen
   static const discover = "Discover";
   static const all = "All";
@@ -41,6 +44,7 @@ class AppTexts {
   static const grandTotal = "Grand Total";
   static const backExplore = "BACK EXPLORE";
   static const cartItemDeleteMsg = "Cart Item deleted successfully";
+  static const proceedError = "Please add Shoe to cart to proceed";
 
   // Error
   static const notSelected = "not selected";
@@ -60,4 +64,5 @@ class AppTexts {
   static const shipping = "Shipping";
   static const totalOrder = "Total Order";
   static const orderPlaced = "Order placed succesfully";
+  static const processing = "Processing...";
 }

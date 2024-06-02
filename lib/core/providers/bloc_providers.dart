@@ -3,6 +3,7 @@ import 'package:shoesly/bloc/brand/brand_bloc.dart';
 
 import '../../bloc/cart/cart_bloc.dart';
 import '../../bloc/filter/filter_bloc.dart';
+import '../../bloc/order/order_bloc.dart';
 import '../../bloc/review/review_bloc.dart';
 import '../../bloc/shoe/shoe_bloc.dart';
 
@@ -13,5 +14,6 @@ class BlocProviders {
     BlocProvider<ReviewBloc>(create: (context) => ReviewBloc()),
     BlocProvider<CartBloc>(create: (context) => CartBloc()),
     BlocProvider<FilterBloc>(create: (context) => FilterBloc()),
+    BlocProvider<OrderBloc>(create: (context) => OrderBloc()),
   ];
 }

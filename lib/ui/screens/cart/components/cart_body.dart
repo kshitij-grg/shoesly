@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoesly/bloc/cart/cart_bloc.dart';
@@ -34,11 +32,10 @@ class _CartBodyState extends State<CartBody> {
     return BlocConsumer<CartBloc, CartState>(
       listener: (context, state) {
         if (state.cartDeleteStatus == AppStatus.success) {
-          successToast(msg: AppTexts.cartItemDeleteMsg, context: context);
+          successToast(message: AppTexts.cartItemDeleteMsg);
         }
       },
       builder: (context, state) {
-        log((state.cartModelList).toString());
         return Column(
           children: [
             Expanded(
@@ -177,8 +174,10 @@ class _CartBodyState extends State<CartBody> {
               hasBtn: false,
               leadTitle:
                   getCartGrandTotal(cartModelList: state.cartModelList ?? []),
-              trailOnTap: () =>
-                  RouteNavigator.navigateNamed(context, RouteConfig.orderRoute),
+              trailOnTap: () => state.cartModelList?.isEmpty == true
+                  ? errorToast(message: AppTexts.proceedError)
+                  : RouteNavigator.navigateNamed(
+                      context, RouteConfig.orderRoute),
             ),
           ],
         );

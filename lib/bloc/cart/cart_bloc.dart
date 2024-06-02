@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoesly/core/enums/enum.dart';
@@ -32,7 +30,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       case CartStatus.update:
         int quantity = state.cartModelList?[event.index ?? 0].quantity ?? 0;
-        log(quantity.toString());
         switch (event.counterStatus) {
           case CounterStatus.minus:
             if (quantity > 1) {

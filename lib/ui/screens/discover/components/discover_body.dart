@@ -137,11 +137,10 @@ class _DiscoverBodyState extends State<DiscoverBody> {
                         var model = state.shoeModelList?[index];
                         return GestureDetector(
                           onTap: () => RouteNavigator.navigateNamed(
-                            context,
-                            RouteConfig.shoeRoute,
-                            arguments: state.shoeModelList?.last
-                                .id, //only because we have inserted all the required details in only one shoe otherwise use model?.id
-                          ),
+                              context, RouteConfig.shoeRoute,
+                              arguments:
+                                  "ienjKUJDzUJ2IBSuUcOA" // mostly we use state.shoeModelList?[index].id but here only because we have inserted all the required details in only one shoe
+                              ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,

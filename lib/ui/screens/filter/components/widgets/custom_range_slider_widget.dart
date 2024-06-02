@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 import '../../../../../core/app/constants/app_dimensions.dart';
 import '../../../../../core/app/constants/app_styles.dart';
 
+// ignore: must_be_immutable
 class CustomRangeSliderWidget extends StatefulWidget {
   final double minItemPrice;
   final double maxItemPrice;
   final int divisions;
+  RangeValues itemPriceRange;
   final Function(RangeValues priceRange)? onChange;
-  const CustomRangeSliderWidget(
-      {super.key,
-      this.minItemPrice = 0,
-      this.maxItemPrice = 1000,
-      this.divisions = 4,
-      this.onChange});
+  CustomRangeSliderWidget({
+    super.key,
+    this.minItemPrice = 0,
+    this.maxItemPrice = 1000,
+    this.divisions = 4,
+    required this.itemPriceRange,
+    this.onChange,
+  });
 
   @override
   State<CustomRangeSliderWidget> createState() =>
@@ -21,8 +25,6 @@ class CustomRangeSliderWidget extends StatefulWidget {
 }
 
 class _CustomRangeSliderWidgetState extends State<CustomRangeSliderWidget> {
-  RangeValues itemPriceRange = const RangeValues(0, 0);
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,13 +40,13 @@ class _CustomRangeSliderWidgetState extends State<CustomRangeSliderWidget> {
           child: RangeSlider(
               min: widget.minItemPrice,
               max: widget.maxItemPrice,
-              values: itemPriceRange,
+              values: widget.itemPriceRange,
               activeColor: Colors.black,
               inactiveColor: Colors.grey.shade300,
               divisions: widget.divisions,
               labels: RangeLabels(
-                  "${priceLabel(priceRange: itemPriceRange.start)}",
-                  "${priceLabel(priceRange: itemPriceRange.end)}"),
+                  "${priceLabel(priceRange: widget.itemPriceRange.start)}",
+                  "${priceLabel(priceRange: widget.itemPriceRange.end)}"),
               onChanged: (value) {
                 changeItemPriceRange(rangeValues: value);
                 if (widget.onChange != null) widget.onChange!(value);
@@ -63,9 +65,9 @@ class _CustomRangeSliderWidgetState extends State<CustomRangeSliderWidget> {
                       isFirstItem: isFirstItem,
                       isLastItem: isLastItem));
               var selectedMinPriceRange =
-                  priceLabel(priceRange: itemPriceRange.start);
+                  priceLabel(priceRange: widget.itemPriceRange.start);
               var selectedMaxPriceRange =
-                  priceLabel(priceRange: itemPriceRange.end);
+                  priceLabel(priceRange: widget.itemPriceRange.end);
               var isSelectedPriceIdentical =
                   selectedMinPriceRange == breakPointPrices ||
                       selectedMaxPriceRange == breakPointPrices;
@@ -97,7 +99,7 @@ class _CustomRangeSliderWidgetState extends State<CustomRangeSliderWidget> {
 
   changeItemPriceRange({required RangeValues rangeValues}) {
     setState(() {
-      itemPriceRange = rangeValues;
+      widget.itemPriceRange = rangeValues;
     });
   }
 

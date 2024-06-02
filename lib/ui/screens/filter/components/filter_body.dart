@@ -16,6 +16,8 @@ import 'package:shoesly/ui/widgets/custom_svg_widget.dart';
 
 import '../../../../bloc/brand/brand_bloc.dart';
 import '../../../../bloc/filter/filter_bloc.dart';
+import '../../../../bloc/shoe/shoe_bloc.dart';
+import '../../../../core/routes/route_navigator.dart';
 
 class FilterBody extends StatelessWidget {
   const FilterBody({super.key});
@@ -100,6 +102,10 @@ class FilterBody extends StatelessWidget {
                       ),
                       kVSizedBox2,
                       CustomRangeSliderWidget(
+                        minItemPrice: 0,
+                        maxItemPrice: 250,
+                        itemPriceRange: RangeValues(
+                            filterState.minPrice, filterState.maxPrice),
                         onChange: (priceRange) => filterBloc.add(
                             FilterPriceRangeChanged(
                                 minPrice: priceRange.start,
@@ -199,9 +205,22 @@ class FilterBody extends StatelessWidget {
             ),
           ),
         ),
-        const CustomAddWidget(
-          trailTitle: AppTexts.apply,
-          leadTitle: AppTexts.reset,
+        BlocBuilder<FilterBloc, FilterState>(
+          builder: (context, s) {
+            return BlocBuilder<ShoeBloc, ShoeState>(
+              builder: (context, state) {
+                return CustomAddWidget(
+                  trailTitle: AppTexts.apply,
+                  leadTitle: AppTexts.reset,
+                  leadOnTap: () => filterBloc.add(FilterValuesReset()),
+                  trailOnTap: () {
+                    RouteNavigator.back(context);
+                    filterBloc.saveFilterValues(context: context);
+                  },
+                );
+              },
+            );
+          },
         )
       ],
     );

@@ -23,6 +23,13 @@ class FilterGenderSelected extends FilterEvent {
 }
 
 class FilterPriceRangeChanged extends FilterEvent {
-  final double? minPrice, maxPrice;
-  const FilterPriceRangeChanged({this.minPrice, this.maxPrice});
+  final double minPrice, maxPrice;
+  const FilterPriceRangeChanged({this.minPrice = 0, this.maxPrice = 0});
 }
+
+class FilterSortBySelected extends FilterEvent {
+  final AppStaticModel? sortbyModel;
+  const FilterSortBySelected({this.sortbyModel});
+}
+
+class FilterValuesReset extends FilterEvent {}

@@ -45,9 +45,9 @@ class ShoeBloc extends Bloc<ShoeEvent, ShoeState> {
               cartStatus: CartStatus.add,
             ));
       }
-      return errorToast(msg: AppTexts.emptyShoeSize, context: context);
+      return errorToast(message: AppTexts.emptyShoeSize);
     }
-    return errorToast(msg: AppTexts.emptyShoeColor, context: context);
+    return errorToast(message: AppTexts.emptyShoeColor);
   }
 
   _onShoeColorSelect(ShoeColorSelected event, Emitter<ShoeState> emit) async {

@@ -3,15 +3,15 @@ import 'package:shoesly/data/models/app_static/app_static_model.dart';
 class FilterRepository {
   var sortbyList = <AppStaticModel>[
     AppStaticModel(
-      id: "",
+      id: "recent",
       value: "Most recent",
     ),
     AppStaticModel(
-      id: "",
+      id: "lowest",
       value: "Lowest price",
     ),
     AppStaticModel(
-      id: "",
+      id: "highest",
       value: "Highest price",
     ),
   ];
