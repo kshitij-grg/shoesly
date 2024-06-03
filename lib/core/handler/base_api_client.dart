@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shoesly/core/utils/custom_toasts.dart';
@@ -28,33 +29,46 @@ class BaseApiClient {
             hasQuery ? filteredShoes(queryData, ref) : ref;
         response = await filteredData
             .get()
-            .timeout(const Duration(seconds: timeoutDuration))
-            .catchError((error) =>
-                errorToast(message: "Failed to load $collection: $error"));
+            .timeout(const Duration(seconds: timeoutDuration));
+        // .catchError((error) =>
+        //     errorToast(message: "Failed to load $collection: $error"));
       }
 
       return response;
     } on FirebaseException catch (e) {
+      log(e.toString());
       throw errorToast(message: e.message ?? '');
     }
   }
 
   static Query<Map<String, dynamic>> filteredShoes(
       FilterModel? filterModel, CollectionReference<Map<String, dynamic>> ref) {
-    if (filterModel?.sortBy != null) {
-      return switch (filterModel?.sortBy?.id) {
-        "recent" =>
-          ref.orderBy("createdAt", descending: true), //for recent shoes
-        "lowest" => ref.orderBy("price"), //for lowest price
-        _ => ref.orderBy("price", descending: true), //for highest price
-      };
+    Query<Map<String, dynamic>> queryRef = ref;
+
+    if (filterModel?.sortBy?.id != null) {
+      switch (filterModel?.sortBy?.id) {
+        case "recent":
+          queryRef =
+              ref.orderBy("createdAt", descending: true); //for recent shoes
+          break;
+        case "lowest":
+          queryRef = ref.orderBy("price"); //for lowest price
+          break;
+        case "highest":
+          queryRef = ref.orderBy("price", descending: true); //for highest price
+          break;
+        default:
+      }
     }
-    return ref
+    if (filterModel?.maxPrice != 0.0) {
+      queryRef = ref
+          .where("price", isGreaterThanOrEqualTo: filterModel?.minPrice)
+          .where("price", isLessThanOrEqualTo: filterModel?.maxPrice);
+    }
+    return queryRef
         .where("brandInfo.brandName", isEqualTo: filterModel?.brand)
         .where("colors", arrayContains: filterModel?.color)
-        .where("gender", isEqualTo: filterModel?.gender)
-        .where("price", isGreaterThanOrEqualTo: filterModel?.minPrice)
-        .where("price", isLessThanOrEqualTo: filterModel?.maxPrice);
+        .where("gender", isEqualTo: filterModel?.gender);
   }
 
   static Future<dynamic> post({
